@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 0,
+  "id": "11111111-1111-4111-8111-111111111111",
+  "name": "Legacy System",
+  "createdAt": "2026-01-01T00:00:00.000Z",
+  "updatedAt": "2026-01-01T00:00:00.000Z",
+  "seed": 42,
+  "graph": {
+    "nodes": [
+      {
+        "id": "n1",
+        "type": "api",
+        "position": { "x": 0, "y": 0 },
+        "config": { "concurrency": 200 }
+      },
+      {
+        "id": "n2",
+        "type": "redis",
+        "position": { "x": 200, "y": 0 },
+        "config": {}
+      }
+    ],
+    "edges": [
+      { "id": "e1", "source": "n1", "target": "n2", "config": {} }
+    ]
+  },
+  "workloads": [
+    { "id": "w1", "kind": "poisson", "rate": 200, "target": "n1", "request": {} }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "id": "broken",
+  "name": "Broken System",
+  "createdAt": "2026-01-01T00:00:00.000Z",
+  "updatedAt": "2026-01-01T00:00:00.000Z",
+  "seed": "not-a-number",
+  "graph": {
+    "nodes": [
+      { "id": "n1", "type": "api" }
+    ],
+    "edges": []
+  }
+}

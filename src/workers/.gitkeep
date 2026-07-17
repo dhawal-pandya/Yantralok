@@ -1,0 +1,2 @@
+# Worker host wiring (DESIGN §1, ADR-006). Empty until the engine moves off the
+# main thread — added when the UI janks under load (trigger identified in Phase 4).
