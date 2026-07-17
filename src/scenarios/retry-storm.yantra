@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "id": "scn-retry-storm-0000-000000000003",
+  "name": "Lesson 5: Retry Storm",
+  "createdAt": "2026-01-01T00:00:00.000Z",
+  "updatedAt": "2026-01-01T00:00:00.000Z",
+  "seed": 3030,
+  "graph": {
+    "nodes": [
+      {
+        "id": "client",
+        "type": "client",
+        "position": { "x": 0, "y": 120 },
+        "config": { "requestRate": 350, "thinkTime": 0 }
+      },
+      {
+        "id": "api",
+        "type": "api",
+        "position": { "x": 220, "y": 120 },
+        "config": { "concurrency": 100000, "serviceTime": 5, "queueCapacity": 100000, "timeout": 80, "retries": 3 }
+      },
+      {
+        "id": "postgres",
+        "type": "postgres",
+        "position": { "x": 460, "y": 120 },
+        "config": { "maxConnections": 10, "serviceTime": 25, "queueCapacity": 100000, "replicas": 0 }
+      }
+    ],
+    "edges": [
+      {
+        "id": "e-client-api",
+        "source": "client",
+        "target": "api",
+        "sourceHandle": "s-r",
+        "targetHandle": "t-l",
+        "config": { "latency": 40, "bandwidth": 1000 }
+      },
+      {
+        "id": "e-api-pg",
+        "source": "api",
+        "target": "postgres",
+        "sourceHandle": "s-r",
+        "targetHandle": "t-l",
+        "config": { "latency": 1, "bandwidth": 1000 }
+      }
+    ]
+  },
+  "workloads": [],
+  "interventions": []
+}
