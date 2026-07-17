@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "id": "scn-autoscale-flash-00000032",
+  "name": "Lesson 7: Flash Crowd Autoscaling",
+  "createdAt": "2026-07-02T00:00:00.000Z",
+  "updatedAt": "2026-07-02T00:00:00.000Z",
+  "seed": 4242,
+  "graph": {
+    "nodes": [
+      {
+        "id": "client",
+        "type": "client",
+        "position": { "x": 0, "y": 120 },
+        "config": { "requestRate": 5200, "thinkTime": 0, "writeRatio": 0 }
+      },
+      {
+        "id": "api",
+        "type": "api",
+        "position": { "x": 240, "y": 120 },
+        "config": {
+          "concurrency": 20,
+          "serviceTime": 10,
+          "queueCapacity": 1000,
+          "timeout": 1000,
+          "retries": 2,
+          "replicas": 0,
+          "autoscale": true,
+          "scaleMetric": "utilization",
+          "targetUtilization": 0.7,
+          "targetRps": 5000,
+          "minInstances": 1,
+          "maxInstances": 10,
+          "provisionMs": 1000
+        }
+      },
+      {
+        "id": "postgres",
+        "type": "postgres",
+        "position": { "x": 480, "y": 120 },
+        "config": { "maxConnections": 60, "serviceTime": 10, "queueCapacity": 500, "replicas": 0 }
+      }
+    ],
+    "edges": [
+      {
+        "id": "e-client-api",
+        "source": "client",
+        "target": "api",
+        "sourceHandle": "s-r",
+        "targetHandle": "t-l",
+        "config": { "latency": 20, "bandwidth": 1000 }
+      },
+      {
+        "id": "e-api-pg",
+        "source": "api",
+        "target": "postgres",
+        "sourceHandle": "s-r",
+        "targetHandle": "t-l",
+        "config": { "latency": 0.5, "bandwidth": 1000 }
+      }
+    ]
+  },
+  "workloads": [],
+  "interventions": []
+}

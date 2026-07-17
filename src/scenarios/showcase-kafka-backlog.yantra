@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "id": "scn-showcase-kafka-00000041",
+  "name": "Kafka: Decoupling & Backlog",
+  "createdAt": "2026-07-05T00:00:00.000Z",
+  "updatedAt": "2026-07-05T00:00:00.000Z",
+  "seed": 5041,
+  "graph": {
+    "nodes": [
+      {
+        "id": "producer",
+        "type": "api",
+        "position": { "x": 240, "y": 120 },
+        "config": { "concurrency": 100000, "serviceTime": 1, "queueCapacity": 100000, "timeout": 2000, "retries": 0 }
+      },
+      {
+        "id": "client",
+        "type": "client",
+        "position": { "x": 0, "y": 120 },
+        "config": { "requestRate": 80, "thinkTime": 0, "pattern": "burst", "burstX": 5, "burstStartMs": 2000, "burstMs": 3000 }
+      },
+      {
+        "id": "kafka",
+        "type": "kafka",
+        "position": { "x": 500, "y": 120 },
+        "config": { "consumers": 6, "consumeTime": 30, "maxBacklog": 0 }
+      }
+    ],
+    "edges": [
+      {
+        "id": "e-client-producer",
+        "source": "client",
+        "target": "producer",
+        "sourceHandle": "s-r",
+        "targetHandle": "t-l",
+        "config": { "latency": 10, "bandwidth": 1000 }
+      },
+      {
+        "id": "e-producer-kafka",
+        "source": "producer",
+        "target": "kafka",
+        "sourceHandle": "s-r",
+        "targetHandle": "t-l",
+        "config": { "latency": 1, "bandwidth": 1000 }
+      }
+    ]
+  },
+  "workloads": [],
+  "interventions": []
+}
