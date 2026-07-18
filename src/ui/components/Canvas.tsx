@@ -236,6 +236,7 @@ export function Canvas() {
         onPaneClick={() => select(null)}
         deleteKeyCode={["Backspace", "Delete"]}
         fitView
+        fitViewOptions={{ padding: 0.35, maxZoom: 0.85 }}
         minZoom={0.2}
         proOptions={{ hideAttribution: false }}
       >
