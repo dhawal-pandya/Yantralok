@@ -1,10 +1,18 @@
 # Yantralok
 
-**Behavioral CAD for software systems.** Design a distributed system on a canvas, give each component realistic numbers, generate traffic, and _watch it behave_ — find the bottleneck, inject failures, and see the cascade, all before anything is deployed.
+**Behavioral CAD for software systems.** Design a distributed system on a canvas, give each component realistic numbers, generate traffic, and _watch it behave_: find the bottleneck, inject failures, and see the cascade, all before anything is deployed.
 
 It's to architecture diagrams what finite-element simulation is to a bridge drawing: the diagram isn't documentation, **the diagram is the system**. Every box is a behavioral model, every line carries requests, every property changes the outcome.
 
 Runs **entirely in the browser**, local-first, no backend, no account.
+
+<p align="center">
+  <a href="https://dhawal-pandya.github.io/Yantralok/">
+    <img src="docs/assets/screenshot.png" alt="Yantralok simulating Netflix's stream-start path: a live system graph tinted by an ambient health glow, with the API tier lit as the bottleneck and the CDN killed, alongside streaming latency and throughput charts and a per-request trace." width="100%" />
+  </a>
+</p>
+
+<p align="center"><strong><a href="https://dhawal-pandya.github.io/Yantralok/">▶ Try it live</a></strong>, no install, it runs right in your browser.</p>
 
 > New here? Start with the **[Usage Guide](docs/USAGE.md)**, a hands-on walkthrough written for a working engineer.
 
@@ -62,7 +70,7 @@ docs/          DESIGN.md · ROADMAP-0.md · ROADMAP-1.md · DECISIONS.md · USAG
 CLAUDE.md      The vision and philosophy
 ```
 
-The dependency rule points inward, `ui → document → components → engine → schema` — and is enforced by lint; `engine/` may import only `schema/`.
+The dependency rule points inward, `ui → document → components → engine → schema`: and is enforced by lint; `engine/` may import only `schema/`.
 
 ## Scripts
 
