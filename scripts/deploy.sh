@@ -14,6 +14,12 @@ REPO_ROOT="$(git rev-parse --show-toplevel)"
 SRC_SHA="$(git rev-parse --short HEAD 2>/dev/null || echo unknown)"
 cd "$REPO_ROOT"
 
+# Ensure npm is in PATH (hooks may not inherit full environment)
+export PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
+if ! command -v npm &> /dev/null; then
+  export PATH="$HOME/.nvm/versions/node/*/bin:$PATH"
+fi
+
 echo "[deploy] building ($BUILD_CMD)..."
 $BUILD_CMD
 
