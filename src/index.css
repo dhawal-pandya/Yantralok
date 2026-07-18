@@ -99,6 +99,36 @@ body {
   color: #3d4553;
 }
 
+/* First-run cue on the ? guide: amber tint plus a soft expanding ring, until it's
+   opened once. Stilled for users who prefer reduced motion. */
+.guide-pulse {
+  background: var(--color-signal);
+  border-color: var(--color-signal);
+  color: #090c12;
+  animation: guide-pulse 1.5s ease-out infinite;
+}
+@keyframes guide-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgb(245 179 1 / 0.85);
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.12);
+  }
+  75% {
+    box-shadow: 0 0 0 12px rgb(245 179 1 / 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgb(245 179 1 / 0);
+    transform: scale(1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .guide-pulse {
+    animation: none;
+  }
+}
+
 /* Thin, dark scrollbars so panels read as instrument surfaces. */
 * {
   scrollbar-width: thin;

@@ -14,12 +14,19 @@ import {
   SHOWCASES_GUIDE,
   type ScenarioEntry,
 } from "@/scenarios";
+import { useLayoutStore } from "@/ui/store/layoutStore";
 import { Tip } from "./Tooltip";
 
 export function ScenarioGuide({ onLoad }: { onLoad: (id: string) => void }) {
   const [open, setOpen] = useState(false);
   // null = the overview (shelf logic); otherwise the selected scenario's id.
   const [selected, setSelected] = useState<string | null>(null);
+  const guideSeen = useLayoutStore((s) => s.guideSeen);
+  const markGuideSeen = useLayoutStore((s) => s.markGuideSeen);
+  const openGuide = () => {
+    setOpen(true);
+    markGuideSeen();
+  };
 
   useEffect(() => {
     if (!open) return;
@@ -38,8 +45,12 @@ export function ScenarioGuide({ onLoad }: { onLoad: (id: string) => void }) {
       <Tip label="Browse and load pre-built systems (lessons and real companies), with a guide to each">
         <button
           aria-label="Open the pre-built systems guide"
-          onClick={() => setOpen(true)}
-          className="flex h-6 w-6 items-center justify-center rounded-full border border-neutral-700 text-xs font-semibold text-neutral-400 transition-colors hover:border-signal hover:text-signal"
+          onClick={openGuide}
+          className={`flex h-6 w-6 items-center justify-center rounded-full border text-xs font-semibold transition-colors ${
+            guideSeen
+              ? "border-neutral-700 text-neutral-400 hover:border-signal hover:text-signal"
+              : "guide-pulse"
+          }`}
         >
           ?
         </button>

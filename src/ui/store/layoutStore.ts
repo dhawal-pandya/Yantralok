@@ -29,6 +29,7 @@ interface Persisted {
   glow: boolean; // ambient health lens; off by default (cosmetic, scales with size)
   glowSignal: GlowSignal;
   tourSeen: boolean; // the guided tour shows exactly once, ever
+  guideSeen: boolean; // the ? guide pulses until it's opened once
 }
 
 export interface LayoutState extends Persisted {
@@ -38,6 +39,7 @@ export interface LayoutState extends Persisted {
   toggleGlow(): void;
   setGlowSignal(signal: GlowSignal): void;
   markTourSeen(): void;
+  markGuideSeen(): void;
   enterApp(): void;
 }
 
@@ -52,6 +54,7 @@ const DEFAULTS: Persisted = {
   glow: false,
   glowSignal: "load",
   tourSeen: false,
+  guideSeen: false,
 };
 
 const clamp = (dim: Dim, v: number): number =>
@@ -91,6 +94,7 @@ function load(): Persisted {
           ? (mode as GlowSignal)
           : DEFAULTS.glowSignal,
       tourSeen: s.tourSeen ?? DEFAULTS.tourSeen,
+      guideSeen: s.guideSeen ?? DEFAULTS.guideSeen,
     };
   } catch {
     return DEFAULTS;
@@ -110,6 +114,7 @@ export const useLayoutStore = create<LayoutState>()((set, get) => {
       glow,
       glowSignal,
       tourSeen,
+      guideSeen,
     } = get();
     try {
       localStorage.setItem(
@@ -125,6 +130,7 @@ export const useLayoutStore = create<LayoutState>()((set, get) => {
           glow,
           glowSignal,
           tourSeen,
+          guideSeen,
         }),
       );
     } catch {
@@ -163,6 +169,11 @@ export const useLayoutStore = create<LayoutState>()((set, get) => {
     markTourSeen() {
       if (get().tourSeen) return;
       set({ tourSeen: true });
+      persist();
+    },
+    markGuideSeen() {
+      if (get().guideSeen) return;
+      set({ guideSeen: true });
       persist();
     },
     enterApp() {

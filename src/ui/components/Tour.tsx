@@ -11,6 +11,10 @@ const STEPS = [
     body: "This canvas is a system, not a drawing. Drag a component from the palette on the left onto the canvas (or click to drop one in), position it, then connect components by their handles. Every box is a behavioral model with real numbers you can edit.",
   },
   {
+    title: "Or start from a real one",
+    body: "Rather not build from scratch? Click the glowing ? in the top bar for a library of pre-built systems, from a simple CRUD API to Netflix, Uber, and Stripe, each with notes on what to look for and where it breaks. Load one and it drops straight onto the canvas.",
+  },
+  {
     title: "Simulate it",
     body: "Press Run (or the spacebar) to send traffic through it. The charts below stream live latency, throughput, and utilization as the run plays.",
   },
