@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "scn-irctc-tatkal-00000050",
+  "name": "IRCTC: Tatkal Booking (10 AM Rush)",
+  "createdAt": "2026-07-06T00:00:00.000Z",
+  "updatedAt": "2026-07-06T00:00:00.000Z",
+  "seed": 6050,
+  "graph": {
+    "nodes": [
+      { "id": "client", "type": "client", "position": { "x": 0, "y": 220 }, "config": { "requestRate": 300, "writeRatio": 0.75, "pattern": "burst", "burstX": 8, "burstStartMs": 4000, "burstMs": 8000 } },
+      { "id": "waitroom", "type": "api-gateway", "position": { "x": 240, "y": 220 }, "config": { "maxConnections": 200000, "serviceTime": 2, "timeout": 120000, "retries": 0 } },
+      { "id": "lb", "type": "load-balancer", "position": { "x": 470, "y": 220 }, "config": { "algorithm": "least-connections", "maxConnections": 200000 } },
+      { "id": "app-a", "type": "api", "position": { "x": 700, "y": 90 }, "config": { "concurrency": 24, "serviceTime": 8, "queueCapacity": 200000, "timeout": 100000, "retries": 0, "autoscale": true, "scaleMetric": "request-rate", "targetRps": 160, "minInstances": 2, "maxInstances": 20, "provisionMs": 800 } },
+      { "id": "app-b", "type": "api", "position": { "x": 700, "y": 350 }, "config": { "concurrency": 24, "serviceTime": 8, "queueCapacity": 200000, "timeout": 100000, "retries": 0, "autoscale": true, "scaleMetric": "request-rate", "targetRps": 160, "minInstances": 2, "maxInstances": 20, "provisionMs": 800 } },
+      { "id": "avail", "type": "redis", "position": { "x": 950, "y": 90 }, "config": { "concurrency": 64, "getLatency": 1, "hitRatio": 0.5 } },
+      { "id": "booking", "type": "postgres", "position": { "x": 950, "y": 350 }, "config": { "maxConnections": 18, "serviceTime": 20, "queueCapacity": 200000 } }
+    ],
+    "edges": [
+      { "id": "e-cl-wr", "source": "client", "target": "waitroom", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 40, "bandwidth": 1000 } },
+      { "id": "e-wr-lb", "source": "waitroom", "target": "lb", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-lb-a", "source": "lb", "target": "app-a", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-lb-b", "source": "lb", "target": "app-b", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-a-av", "source": "app-a", "target": "avail", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-a-bk", "source": "app-a", "target": "booking", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-b-av", "source": "app-b", "target": "avail", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-b-bk", "source": "app-b", "target": "booking", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } }
+    ]
+  },
+  "workloads": [],
+  "interventions": []
+}

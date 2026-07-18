@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "scn-lesson-quorum-0000000046",
+  "name": "Lesson 14: Quorum & Consistency",
+  "createdAt": "2026-07-05T00:00:00.000Z",
+  "updatedAt": "2026-07-05T00:00:00.000Z",
+  "seed": 4614,
+  "graph": {
+    "nodes": [
+      {
+        "id": "client",
+        "type": "client",
+        "position": { "x": 0, "y": 160 },
+        "config": { "requestRate": 600, "thinkTime": 0, "writeRatio": 0.3 }
+      },
+      {
+        "id": "cassandra",
+        "type": "cassandra",
+        "position": { "x": 280, "y": 160 },
+        "config": { "maxConnections": 12, "serviceTime": 4, "queueCapacity": 100000, "quorumReplication": true, "nodes": 6, "replicationFactor": 3, "writeQuorum": 1, "readQuorum": 1 }
+      }
+    ],
+    "edges": [
+      {
+        "id": "e-client-cassandra",
+        "source": "client",
+        "target": "cassandra",
+        "sourceHandle": "s-r",
+        "targetHandle": "t-l",
+        "config": { "latency": 20, "bandwidth": 1000 }
+      }
+    ]
+  },
+  "workloads": [],
+  "interventions": []
+}

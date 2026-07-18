@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "scn-reddit-sub-00000000000023",
+  "name": "Reddit: Subreddit Listing",
+  "createdAt": "2026-01-01T00:00:00.000Z",
+  "updatedAt": "2026-07-04T00:00:00.000Z",
+  "seed": 6003,
+  "graph": {
+    "nodes": [
+      { "id": "client", "type": "client", "position": { "x": 0, "y": 160 }, "config": { "requestRate": 3000, "writeRatio": 0.1 } },
+      { "id": "gateway", "type": "api-gateway", "position": { "x": 240, "y": 160 }, "config": { "serviceTime": 2, "timeout": 1000, "retries": 2 } },
+      { "id": "lb", "type": "load-balancer", "position": { "x": 470, "y": 160 }, "config": { "algorithm": "round-robin" } },
+      { "id": "api-a", "type": "api", "position": { "x": 700, "y": 60 }, "config": { "concurrency": 200, "serviceTime": 10, "timeout": 1000, "retries": 2 } },
+      { "id": "api-b", "type": "api", "position": { "x": 700, "y": 280 }, "config": { "concurrency": 200, "serviceTime": 10, "timeout": 1000, "retries": 2 } },
+      { "id": "memcached", "type": "memcached", "position": { "x": 950, "y": 60 }, "config": { "concurrency": 16, "getLatency": 0.5, "hitRatio": 0.9 } },
+      { "id": "postgres", "type": "postgres", "position": { "x": 950, "y": 280 }, "config": { "maxConnections": 20, "serviceTime": 12 } }
+    ],
+    "edges": [
+      { "id": "e-cl-gw", "source": "client", "target": "gateway", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 40, "bandwidth": 1000 } },
+      { "id": "e-gw-lb", "source": "gateway", "target": "lb", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-lb-a", "source": "lb", "target": "api-a", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-lb-b", "source": "lb", "target": "api-b", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-a-mc", "source": "api-a", "target": "memcached", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-a-pg", "source": "api-a", "target": "postgres", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-b-mc", "source": "api-b", "target": "memcached", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-b-pg", "source": "api-b", "target": "postgres", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } }
+    ]
+  },
+  "workloads": [],
+  "interventions": []
+}

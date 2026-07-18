@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "id": "scn-lesson-replicas-00000037",
+  "name": "Lesson 8: Read Replicas & Stale Reads",
+  "createdAt": "2026-07-04T00:00:00.000Z",
+  "updatedAt": "2026-07-04T00:00:00.000Z",
+  "seed": 1108,
+  "graph": {
+    "nodes": [
+      {
+        "id": "client",
+        "type": "client",
+        "position": { "x": 0, "y": 120 },
+        "config": { "requestRate": 400, "thinkTime": 0, "writeRatio": 0.05 }
+      },
+      {
+        "id": "api",
+        "type": "api",
+        "position": { "x": 220, "y": 120 },
+        "config": { "concurrency": 200, "serviceTime": 8, "timeout": 1000, "retries": 2 }
+      },
+      {
+        "id": "postgres",
+        "type": "postgres",
+        "position": { "x": 460, "y": 120 },
+        "config": { "maxConnections": 10, "serviceTime": 10, "replicas": 2, "replicationLagMs": 20 }
+      }
+    ],
+    "edges": [
+      {
+        "id": "e-client-api",
+        "source": "client",
+        "target": "api",
+        "sourceHandle": "s-r",
+        "targetHandle": "t-l",
+        "config": { "latency": 40, "bandwidth": 1000 }
+      },
+      {
+        "id": "e-api-pg",
+        "source": "api",
+        "target": "postgres",
+        "sourceHandle": "s-r",
+        "targetHandle": "t-l",
+        "config": { "latency": 0.5, "bandwidth": 1000 }
+      }
+    ]
+  },
+  "workloads": [],
+  "interventions": []
+}

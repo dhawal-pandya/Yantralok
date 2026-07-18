@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "scn-uber-matching-000000033",
+  "name": "Uber: Ride Matching",
+  "createdAt": "2026-07-04T00:00:00.000Z",
+  "updatedAt": "2026-07-04T00:00:00.000Z",
+  "seed": 5013,
+  "graph": {
+    "nodes": [
+      { "id": "client", "type": "client", "position": { "x": 0, "y": 220 }, "config": { "requestRate": 1200, "writeRatio": 0.25 } },
+      { "id": "gateway", "type": "api-gateway", "position": { "x": 240, "y": 220 }, "config": { "serviceTime": 2, "timeout": 1000, "retries": 2 } },
+      { "id": "matching", "type": "api", "position": { "x": 490, "y": 220 }, "config": { "concurrency": 24, "serviceTime": 12, "timeout": 1000, "retries": 2, "autoscale": true, "scaleMetric": "utilization", "targetUtilization": 0.7, "minInstances": 2, "maxInstances": 8, "provisionMs": 1000 } },
+      { "id": "geo-cache", "type": "redis", "position": { "x": 760, "y": 60 }, "config": { "concurrency": 32, "getLatency": 1, "hitRatio": 0.5 } },
+      { "id": "mysql", "type": "mysql", "position": { "x": 760, "y": 240 }, "config": { "maxConnections": 100, "serviceTime": 5 } },
+      { "id": "postgres", "type": "postgres", "position": { "x": 760, "y": 420 }, "config": { "maxConnections": 60, "serviceTime": 8 } }
+    ],
+    "edges": [
+      { "id": "e-cl-gw", "source": "client", "target": "gateway", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 40, "jitter": 10, "bandwidth": 1000 } },
+      { "id": "e-gw-m", "source": "gateway", "target": "matching", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-m-geo", "source": "matching", "target": "geo-cache", "sourceHandle": "s-t", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-m-my", "source": "matching", "target": "mysql", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-m-pg", "source": "matching", "target": "postgres", "sourceHandle": "s-b", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } }
+    ]
+  },
+  "workloads": [],
+  "interventions": []
+}

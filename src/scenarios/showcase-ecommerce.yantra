@@ -1,0 +1,513 @@
+{
+  "createdAt": "2026-07-06T00:00:00.000Z",
+  "graph": {
+    "edges": [
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 12
+        },
+        "id": "e0",
+        "source": "browser",
+        "sourceHandle": "s-t",
+        "target": "cdn",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 40
+        },
+        "id": "e1",
+        "source": "browser",
+        "sourceHandle": "s-b",
+        "target": "gateway",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e2",
+        "source": "gateway",
+        "sourceHandle": "s-r",
+        "target": "lb",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e3",
+        "source": "lb",
+        "sourceHandle": "s-r",
+        "target": "api-a",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e4",
+        "source": "lb",
+        "sourceHandle": "s-r",
+        "target": "api-b",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e5",
+        "source": "api-a",
+        "sourceHandle": "s-t",
+        "target": "cart",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e6",
+        "source": "api-a",
+        "sourceHandle": "s-r",
+        "target": "catalog",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e7",
+        "source": "api-a",
+        "sourceHandle": "s-r",
+        "target": "search",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e8",
+        "source": "api-a",
+        "sourceHandle": "s-r",
+        "target": "orders",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e9",
+        "source": "api-a",
+        "sourceHandle": "s-b",
+        "target": "events",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e10",
+        "source": "api-b",
+        "sourceHandle": "s-t",
+        "target": "cart",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e11",
+        "source": "api-b",
+        "sourceHandle": "s-r",
+        "target": "catalog",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e12",
+        "source": "api-b",
+        "sourceHandle": "s-r",
+        "target": "search",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e13",
+        "source": "api-b",
+        "sourceHandle": "s-r",
+        "target": "orders",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e14",
+        "source": "api-b",
+        "sourceHandle": "s-b",
+        "target": "events",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e15",
+        "source": "events",
+        "sourceHandle": "s-r",
+        "target": "fulfill",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e16",
+        "source": "fulfill",
+        "sourceHandle": "s-r",
+        "target": "warehouse",
+        "targetHandle": "t-l"
+      }
+    ],
+    "nodes": [
+      {
+        "config": {
+          "amplitude": 0.5,
+          "burstMs": 4000,
+          "burstStartMs": 3000,
+          "burstX": 5,
+          "connectionPool": 8,
+          "connections": false,
+          "dnsLookup": 15,
+          "dnsTtl": 30000,
+          "pattern": "burst",
+          "periodMs": 5000,
+          "rampMs": 5000,
+          "requestRate": 900,
+          "thinkTime": 0,
+          "tlsHandshake": 30,
+          "writeRatio": 0.15
+        },
+        "id": "browser",
+        "position": {
+          "x": 0,
+          "y": 300
+        },
+        "type": "browser"
+      },
+      {
+        "config": {
+          "concurrency": 3000,
+          "evictionPolicy": "allkeys-lru",
+          "getLatency": 5,
+          "hitRatio": 0.8,
+          "maxMemoryMB": 1024,
+          "serviceDist": "exponential",
+          "workingSetMB": 0
+        },
+        "id": "cdn",
+        "position": {
+          "x": 220,
+          "y": 80
+        },
+        "type": "cdn"
+      },
+      {
+        "config": {
+          "backoff": 0,
+          "breakerCooldownMs": 3000,
+          "breakerThreshold": 0.5,
+          "circuitBreaker": false,
+          "connectionPool": 8,
+          "connections": false,
+          "dnsLookup": 15,
+          "dnsTtl": 30000,
+          "maxConnections": 10000,
+          "retries": 2,
+          "serviceDist": "exponential",
+          "serviceTime": 2,
+          "timeout": 1500,
+          "tlsHandshake": 30
+        },
+        "id": "gateway",
+        "position": {
+          "x": 220,
+          "y": 460
+        },
+        "type": "api-gateway"
+      },
+      {
+        "config": {
+          "algorithm": "least-connections",
+          "maxConnections": 40000,
+          "serviceTime": 1
+        },
+        "id": "lb",
+        "position": {
+          "x": 440,
+          "y": 460
+        },
+        "type": "load-balancer"
+      },
+      {
+        "config": {
+          "autoscale": true,
+          "backoff": 20,
+          "breakerCooldownMs": 1500,
+          "breakerThreshold": 0.5,
+          "circuitBreaker": true,
+          "concurrency": 12,
+          "connectionPool": 8,
+          "connections": false,
+          "cpuContention": 0,
+          "dnsLookup": 15,
+          "dnsTtl": 30000,
+          "fanout": "parallel",
+          "maxInstances": 14,
+          "minInstances": 1,
+          "provisionMs": 1000,
+          "queueCapacity": 1000,
+          "replicas": 0,
+          "retries": 2,
+          "scaleMetric": "utilization",
+          "serviceDist": "exponential",
+          "serviceTime": 8,
+          "targetRps": 5000,
+          "targetUtilization": 0.7,
+          "timeout": 1000,
+          "tlsHandshake": 30
+        },
+        "id": "api-a",
+        "position": {
+          "x": 680,
+          "y": 300
+        },
+        "type": "api"
+      },
+      {
+        "config": {
+          "autoscale": true,
+          "backoff": 20,
+          "breakerCooldownMs": 1500,
+          "breakerThreshold": 0.5,
+          "circuitBreaker": true,
+          "concurrency": 12,
+          "connectionPool": 8,
+          "connections": false,
+          "cpuContention": 0,
+          "dnsLookup": 15,
+          "dnsTtl": 30000,
+          "fanout": "parallel",
+          "maxInstances": 14,
+          "minInstances": 1,
+          "provisionMs": 1000,
+          "queueCapacity": 1000,
+          "replicas": 0,
+          "retries": 2,
+          "scaleMetric": "utilization",
+          "serviceDist": "exponential",
+          "serviceTime": 8,
+          "targetRps": 5000,
+          "targetUtilization": 0.7,
+          "timeout": 1000,
+          "tlsHandshake": 30
+        },
+        "id": "api-b",
+        "position": {
+          "x": 680,
+          "y": 620
+        },
+        "type": "api"
+      },
+      {
+        "config": {
+          "concurrency": 64,
+          "evictionPolicy": "allkeys-lru",
+          "getLatency": 1,
+          "hitRatio": 0.85,
+          "maxMemoryMB": 1024,
+          "workingSetMB": 0
+        },
+        "id": "cart",
+        "position": {
+          "x": 960,
+          "y": 60
+        },
+        "type": "redis"
+      },
+      {
+        "config": {
+          "maxConnections": 30,
+          "nodes": 6,
+          "queueCapacity": 500,
+          "quorumReplication": true,
+          "readQuorum": 2,
+          "replicationFactor": 3,
+          "serviceDist": "exponential",
+          "serviceTime": 4,
+          "writeQuorum": 2
+        },
+        "id": "catalog",
+        "position": {
+          "x": 960,
+          "y": 220
+        },
+        "type": "cassandra"
+      },
+      {
+        "config": {
+          "maxConnections": 14,
+          "queueCapacity": 500,
+          "serviceDist": "lognormal",
+          "serviceTime": 12,
+          "shards": 4
+        },
+        "id": "search",
+        "position": {
+          "x": 960,
+          "y": 380
+        },
+        "type": "elasticsearch"
+      },
+      {
+        "config": {
+          "maxConnections": 40,
+          "queueCapacity": 500,
+          "replicas": 2,
+          "replicationLagMs": 8,
+          "serviceDist": "exponential",
+          "serviceTime": 8
+        },
+        "id": "orders",
+        "position": {
+          "x": 960,
+          "y": 540
+        },
+        "type": "postgres"
+      },
+      {
+        "config": {
+          "consumeTime": 5,
+          "consumers": 16,
+          "maxBacklog": 0,
+          "subscriberGroups": 2
+        },
+        "id": "events",
+        "position": {
+          "x": 960,
+          "y": 720
+        },
+        "type": "kafka"
+      },
+      {
+        "config": {
+          "autoscale": false,
+          "backoff": 0,
+          "breakerCooldownMs": 3000,
+          "breakerThreshold": 0.5,
+          "circuitBreaker": false,
+          "concurrency": 60,
+          "connectionPool": 8,
+          "connections": false,
+          "cpuContention": 0,
+          "dnsLookup": 15,
+          "dnsTtl": 30000,
+          "fanout": "sequential",
+          "maxInstances": 10,
+          "minInstances": 1,
+          "provisionMs": 2000,
+          "queueCapacity": 1000,
+          "replicas": 0,
+          "retries": 2,
+          "scaleMetric": "utilization",
+          "serviceDist": "exponential",
+          "serviceTime": 15,
+          "targetRps": 800,
+          "targetUtilization": 0.7,
+          "timeout": 1000,
+          "tlsHandshake": 30
+        },
+        "id": "fulfill",
+        "position": {
+          "x": 1220,
+          "y": 720
+        },
+        "type": "worker"
+      },
+      {
+        "config": {
+          "maxConnections": 40,
+          "queueCapacity": 500,
+          "replicas": 0,
+          "replicationLagMs": 50,
+          "serviceDist": "exponential",
+          "serviceTime": 6
+        },
+        "id": "warehouse",
+        "position": {
+          "x": 1480,
+          "y": 720
+        },
+        "type": "mysql"
+      }
+    ]
+  },
+  "id": "scn-showcase-ecommerce-047",
+  "interventions": [
+    {
+      "atLogicalTime": 4000,
+      "id": "iv0",
+      "kind": "kill",
+      "target": "cdn"
+    },
+    {
+      "atLogicalTime": 9000,
+      "id": "iv1",
+      "kind": "restart",
+      "target": "cdn"
+    }
+  ],
+  "name": "E-Commerce Platform: Black Friday",
+  "schemaVersion": 1,
+  "seed": 6001,
+  "updatedAt": "2026-07-06T00:00:00.000Z",
+  "workloads": []
+}

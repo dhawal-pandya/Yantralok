@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "scn-x-timeline-0000-000000000011",
+  "name": "X: Home Timeline",
+  "createdAt": "2026-01-01T00:00:00.000Z",
+  "updatedAt": "2026-07-04T00:00:00.000Z",
+  "seed": 5011,
+  "graph": {
+    "nodes": [
+      { "id": "client", "type": "client", "position": { "x": 0, "y": 240 }, "config": { "requestRate": 3000, "writeRatio": 0.02 } },
+      { "id": "lb", "type": "load-balancer", "position": { "x": 240, "y": 240 }, "config": { "algorithm": "least-connections" } },
+      { "id": "api-a", "type": "api", "position": { "x": 470, "y": 130 }, "config": { "concurrency": 200, "serviceTime": 10, "timeout": 800, "retries": 2, "fanout": "parallel" } },
+      { "id": "api-b", "type": "api", "position": { "x": 470, "y": 350 }, "config": { "concurrency": 200, "serviceTime": 10, "timeout": 800, "retries": 2, "fanout": "parallel" } },
+      { "id": "redis", "type": "redis", "position": { "x": 740, "y": 60 }, "config": { "concurrency": 32, "getLatency": 1, "hitRatio": 0.9 } },
+      { "id": "cassandra", "type": "cassandra", "position": { "x": 740, "y": 240 }, "config": { "maxConnections": 40, "serviceTime": 4, "quorumReplication": true, "nodes": 6, "replicationFactor": 3, "writeQuorum": 2, "readQuorum": 2 } },
+      { "id": "mysql", "type": "mysql", "position": { "x": 740, "y": 420 }, "config": { "maxConnections": 100, "serviceTime": 5, "replicas": 2, "replicationLagMs": 10 } }
+    ],
+    "edges": [
+      { "id": "e-cl-lb", "source": "client", "target": "lb", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 40, "jitter": 10, "bandwidth": 1000 } },
+      { "id": "e-lb-a", "source": "lb", "target": "api-a", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-lb-b", "source": "lb", "target": "api-b", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-a-rd", "source": "api-a", "target": "redis", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-a-cas", "source": "api-a", "target": "cassandra", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-a-my", "source": "api-a", "target": "mysql", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-b-rd", "source": "api-b", "target": "redis", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-b-cas", "source": "api-b", "target": "cassandra", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-b-my", "source": "api-b", "target": "mysql", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } }
+    ]
+  },
+  "workloads": [],
+  "interventions": []
+}

@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "id": "scn-lesson-fanout-000000000038",
+  "name": "Lesson 9: Fan-out & the Critical Path",
+  "createdAt": "2026-07-04T00:00:00.000Z",
+  "updatedAt": "2026-07-04T00:00:00.000Z",
+  "seed": 1109,
+  "graph": {
+    "nodes": [
+      {
+        "id": "client",
+        "type": "client",
+        "position": { "x": 0, "y": 160 },
+        "config": { "requestRate": 300, "thinkTime": 0 }
+      },
+      {
+        "id": "api",
+        "type": "api",
+        "position": { "x": 220, "y": 160 },
+        "config": { "concurrency": 200, "serviceTime": 10, "timeout": 1000, "retries": 2 }
+      },
+      {
+        "id": "mongo",
+        "type": "mongodb",
+        "position": { "x": 460, "y": 20 },
+        "config": { "maxConnections": 100, "serviceTime": 5 }
+      },
+      {
+        "id": "search",
+        "type": "elasticsearch",
+        "position": { "x": 460, "y": 160 },
+        "config": { "maxConnections": 60, "serviceTime": 25 }
+      },
+      {
+        "id": "s3",
+        "type": "s3",
+        "position": { "x": 460, "y": 300 },
+        "config": { "serviceTime": 40 }
+      }
+    ],
+    "edges": [
+      {
+        "id": "e-client-api",
+        "source": "client",
+        "target": "api",
+        "sourceHandle": "s-r",
+        "targetHandle": "t-l",
+        "config": { "latency": 40, "bandwidth": 1000 }
+      },
+      {
+        "id": "e-api-mongo",
+        "source": "api",
+        "target": "mongo",
+        "sourceHandle": "s-t",
+        "targetHandle": "t-l",
+        "config": { "latency": 0.5, "bandwidth": 1000 }
+      },
+      {
+        "id": "e-api-search",
+        "source": "api",
+        "target": "search",
+        "sourceHandle": "s-r",
+        "targetHandle": "t-l",
+        "config": { "latency": 1, "bandwidth": 1000 }
+      },
+      {
+        "id": "e-api-s3",
+        "source": "api",
+        "target": "s3",
+        "sourceHandle": "s-b",
+        "targetHandle": "t-l",
+        "config": { "latency": 2, "bandwidth": 1000 }
+      }
+    ]
+  },
+  "workloads": [],
+  "interventions": []
+}

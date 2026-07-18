@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "id": "scn-lesson-sharding-000000045",
+  "name": "Lesson 13: Sharding Scales & Isolates",
+  "createdAt": "2026-07-05T00:00:00.000Z",
+  "updatedAt": "2026-07-05T00:00:00.000Z",
+  "seed": 4513,
+  "graph": {
+    "nodes": [
+      {
+        "id": "client",
+        "type": "client",
+        "position": { "x": 0, "y": 160 },
+        "config": { "requestRate": 800, "thinkTime": 0 }
+      },
+      {
+        "id": "api",
+        "type": "api",
+        "position": { "x": 220, "y": 160 },
+        "config": { "concurrency": 100000, "serviceTime": 4, "queueCapacity": 100000, "timeout": 2000, "retries": 0 }
+      },
+      {
+        "id": "search",
+        "type": "elasticsearch",
+        "position": { "x": 460, "y": 160 },
+        "config": { "maxConnections": 8, "serviceTime": 10, "queueCapacity": 100000, "shards": 4 }
+      }
+    ],
+    "edges": [
+      {
+        "id": "e-client-api",
+        "source": "client",
+        "target": "api",
+        "sourceHandle": "s-r",
+        "targetHandle": "t-l",
+        "config": { "latency": 30, "bandwidth": 1000 }
+      },
+      {
+        "id": "e-api-search",
+        "source": "api",
+        "target": "search",
+        "sourceHandle": "s-r",
+        "targetHandle": "t-l",
+        "config": { "latency": 1, "bandwidth": 1000 }
+      }
+    ]
+  },
+  "workloads": [],
+  "interventions": [
+    { "id": "kill-shard", "atLogicalTime": 5000, "kind": "kill", "target": "search", "shard": 1 }
+  ]
+}

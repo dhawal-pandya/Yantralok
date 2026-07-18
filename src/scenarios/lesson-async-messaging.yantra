@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "scn-lesson-async-000000000044",
+  "name": "Lesson 12: Async Messaging & Consumer Lag",
+  "createdAt": "2026-07-05T00:00:00.000Z",
+  "updatedAt": "2026-07-05T00:00:00.000Z",
+  "seed": 4412,
+  "graph": {
+    "nodes": [
+      {
+        "id": "producer",
+        "type": "client",
+        "position": { "x": 0, "y": 120 },
+        "config": { "requestRate": 150, "thinkTime": 0 }
+      },
+      {
+        "id": "kafka",
+        "type": "kafka",
+        "position": { "x": 260, "y": 120 },
+        "config": { "consumers": 4, "consumeTime": 40, "maxBacklog": 0 }
+      }
+    ],
+    "edges": [
+      {
+        "id": "e-producer-kafka",
+        "source": "producer",
+        "target": "kafka",
+        "sourceHandle": "s-r",
+        "targetHandle": "t-l",
+        "config": { "latency": 1, "bandwidth": 1000 }
+      }
+    ]
+  },
+  "workloads": [],
+  "interventions": []
+}

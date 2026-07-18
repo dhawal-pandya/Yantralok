@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "scn-youtube-watch-000000000021",
+  "name": "YouTube: Watch Page",
+  "createdAt": "2026-01-01T00:00:00.000Z",
+  "updatedAt": "2026-01-01T00:00:00.000Z",
+  "seed": 6001,
+  "graph": {
+    "nodes": [
+      { "id": "client", "type": "client", "position": { "x": 0, "y": 240 }, "config": { "requestRate": 5000 } },
+      { "id": "cdn", "type": "cdn", "position": { "x": 240, "y": 80 }, "config": { "concurrency": 2000, "getLatency": 8, "hitRatio": 0.95 } },
+      { "id": "gateway", "type": "api-gateway", "position": { "x": 240, "y": 400 }, "config": { "serviceTime": 2, "timeout": 1000, "retries": 2 } },
+      { "id": "lb", "type": "load-balancer", "position": { "x": 480, "y": 400 }, "config": { "algorithm": "round-robin" } },
+      { "id": "api-a", "type": "api", "position": { "x": 720, "y": 290 }, "config": { "concurrency": 150, "serviceTime": 15, "timeout": 1000, "retries": 2 } },
+      { "id": "api-b", "type": "api", "position": { "x": 720, "y": 510 }, "config": { "concurrency": 150, "serviceTime": 15, "timeout": 1000, "retries": 2 } },
+      { "id": "cassandra", "type": "cassandra", "position": { "x": 980, "y": 290 }, "config": { "maxConnections": 120, "serviceTime": 5 } },
+      { "id": "s3", "type": "s3", "position": { "x": 980, "y": 510 }, "config": { "avgObjectKB": 1500, "serviceTime": 20, "serviceDist": "lognormal" } }
+    ],
+    "edges": [
+      { "id": "e-cl-cdn", "source": "client", "target": "cdn", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 12, "bandwidth": 1000 } },
+      { "id": "e-cl-gw", "source": "client", "target": "gateway", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 40, "bandwidth": 1000 } },
+      { "id": "e-gw-lb", "source": "gateway", "target": "lb", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-lb-a", "source": "lb", "target": "api-a", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-lb-b", "source": "lb", "target": "api-b", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-a-cas", "source": "api-a", "target": "cassandra", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-a-s3", "source": "api-a", "target": "s3", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 1, "bandwidth": 1000 } },
+      { "id": "e-b-cas", "source": "api-b", "target": "cassandra", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-b-s3", "source": "api-b", "target": "s3", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 1, "bandwidth": 1000 } }
+    ]
+  },
+  "workloads": [],
+  "interventions": [
+    { "id": "kill-cdn", "atLogicalTime": 6000, "kind": "kill", "target": "cdn" }
+  ]
+}

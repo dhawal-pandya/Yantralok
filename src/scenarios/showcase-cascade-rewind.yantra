@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "id": "scn-showcase-cascade-0000042",
+  "name": "Cascade & Rewind",
+  "createdAt": "2026-07-05T00:00:00.000Z",
+  "updatedAt": "2026-07-05T00:00:00.000Z",
+  "seed": 5042,
+  "graph": {
+    "nodes": [
+      {
+        "id": "client",
+        "type": "client",
+        "position": { "x": 0, "y": 160 },
+        "config": { "requestRate": 700, "thinkTime": 0 }
+      },
+      {
+        "id": "api",
+        "type": "api",
+        "position": { "x": 240, "y": 160 },
+        "config": { "concurrency": 200, "serviceTime": 8, "queueCapacity": 100000, "timeout": 300, "retries": 2, "backoff": 40, "circuitBreaker": true, "breakerThreshold": 0.5, "breakerCooldownMs": 1500, "autoscale": true, "scaleMetric": "utilization", "targetUtilization": 0.7, "minInstances": 1, "maxInstances": 6, "provisionMs": 1000 }
+      },
+      {
+        "id": "redis",
+        "type": "redis",
+        "position": { "x": 500, "y": 40 },
+        "config": { "concurrency": 50, "getLatency": 1, "hitRatio": 0.9 }
+      },
+      {
+        "id": "postgres",
+        "type": "postgres",
+        "position": { "x": 500, "y": 300 },
+        "config": { "maxConnections": 10, "serviceTime": 20, "queueCapacity": 100000, "replicas": 0 }
+      }
+    ],
+    "edges": [
+      {
+        "id": "e-client-api",
+        "source": "client",
+        "target": "api",
+        "sourceHandle": "s-r",
+        "targetHandle": "t-l",
+        "config": { "latency": 30, "bandwidth": 1000 }
+      },
+      {
+        "id": "e-api-redis",
+        "source": "api",
+        "target": "redis",
+        "sourceHandle": "s-t",
+        "targetHandle": "t-l",
+        "config": { "latency": 0.5, "bandwidth": 1000 }
+      },
+      {
+        "id": "e-api-pg",
+        "source": "api",
+        "target": "postgres",
+        "sourceHandle": "s-b",
+        "targetHandle": "t-l",
+        "config": { "latency": 0.5, "bandwidth": 1000 }
+      }
+    ]
+  },
+  "workloads": [],
+  "interventions": [
+    { "id": "kill-redis", "atLogicalTime": 4000, "kind": "kill", "target": "redis" },
+    { "id": "heal-redis", "atLogicalTime": 7000, "kind": "restart", "target": "redis" }
+  ]
+}

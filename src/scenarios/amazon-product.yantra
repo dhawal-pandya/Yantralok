@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "scn-amazon-product-000000025",
+  "name": "Amazon: Product Page & Cart",
+  "createdAt": "2026-01-01T00:00:00.000Z",
+  "updatedAt": "2026-01-01T00:00:00.000Z",
+  "seed": 6005,
+  "graph": {
+    "nodes": [
+      { "id": "client", "type": "client", "position": { "x": 0, "y": 300 }, "config": { "requestRate": 3000, "writeRatio": 0.2 } },
+      { "id": "gateway", "type": "api-gateway", "position": { "x": 240, "y": 300 }, "config": { "serviceTime": 2, "timeout": 1000, "retries": 2 } },
+      { "id": "lb", "type": "load-balancer", "position": { "x": 480, "y": 300 }, "config": { "algorithm": "round-robin" } },
+      { "id": "api-a", "type": "api", "position": { "x": 720, "y": 180 }, "config": { "concurrency": 250, "serviceTime": 12, "timeout": 1000, "retries": 2, "fanout": "parallel" } },
+      { "id": "api-b", "type": "api", "position": { "x": 720, "y": 420 }, "config": { "concurrency": 250, "serviceTime": 12, "timeout": 1000, "retries": 2, "fanout": "parallel" } },
+      { "id": "redis", "type": "redis", "position": { "x": 980, "y": 40 }, "config": { "concurrency": 48, "getLatency": 1, "hitRatio": 0.8 } },
+      { "id": "postgres", "type": "postgres", "position": { "x": 980, "y": 220 }, "config": { "maxConnections": 100, "serviceTime": 9 } },
+      { "id": "cassandra", "type": "cassandra", "position": { "x": 980, "y": 400 }, "config": { "maxConnections": 120, "serviceTime": 4 } },
+      { "id": "search", "type": "elasticsearch", "position": { "x": 980, "y": 580 }, "config": { "maxConnections": 60, "serviceTime": 12 } }
+    ],
+    "edges": [
+      { "id": "e-cl-gw", "source": "client", "target": "gateway", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 40, "bandwidth": 1000 } },
+      { "id": "e-gw-lb", "source": "gateway", "target": "lb", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-lb-a", "source": "lb", "target": "api-a", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-lb-b", "source": "lb", "target": "api-b", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-a-rd", "source": "api-a", "target": "redis", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-a-pg", "source": "api-a", "target": "postgres", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-a-cas", "source": "api-a", "target": "cassandra", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-a-se", "source": "api-a", "target": "search", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 1, "bandwidth": 1000 } },
+      { "id": "e-b-rd", "source": "api-b", "target": "redis", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-b-pg", "source": "api-b", "target": "postgres", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-b-cas", "source": "api-b", "target": "cassandra", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-b-se", "source": "api-b", "target": "search", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 1, "bandwidth": 1000 } }
+    ]
+  },
+  "workloads": [],
+  "interventions": []
+}

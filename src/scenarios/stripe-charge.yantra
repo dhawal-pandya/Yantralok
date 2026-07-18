@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "scn-stripe-charge-000000029",
+  "name": "Stripe: Charge (write-heavy)",
+  "createdAt": "2026-01-01T00:00:00.000Z",
+  "updatedAt": "2026-01-01T00:00:00.000Z",
+  "seed": 6009,
+  "graph": {
+    "nodes": [
+      { "id": "client", "type": "client", "position": { "x": 0, "y": 220 }, "config": { "requestRate": 1000, "writeRatio": 0.9 } },
+      { "id": "firewall", "type": "firewall", "position": { "x": 220, "y": 220 }, "config": { "serviceTime": 0.5 } },
+      { "id": "gateway", "type": "api-gateway", "position": { "x": 440, "y": 220 }, "config": { "serviceTime": 2, "timeout": 1000, "retries": 2 } },
+      { "id": "api", "type": "api", "position": { "x": 660, "y": 220 }, "config": { "concurrency": 200, "serviceTime": 12, "timeout": 1000, "retries": 2 } },
+      { "id": "redis", "type": "redis", "position": { "x": 900, "y": 60 }, "config": { "concurrency": 32, "getLatency": 1, "hitRatio": 0.8 } },
+      { "id": "mongo", "type": "mongodb", "position": { "x": 900, "y": 240 }, "config": { "maxConnections": 100, "serviceTime": 5 } },
+      { "id": "fraud", "type": "lambda", "position": { "x": 900, "y": 420 }, "config": { "concurrency": 1000, "serviceTime": 25, "timeout": 1000, "retries": 2 } }
+    ],
+    "edges": [
+      { "id": "e-cl-fw", "source": "client", "target": "firewall", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 40, "bandwidth": 1000 } },
+      { "id": "e-fw-gw", "source": "firewall", "target": "gateway", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-gw-api", "source": "gateway", "target": "api", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-api-rd", "source": "api", "target": "redis", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-api-mg", "source": "api", "target": "mongo", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-api-fr", "source": "api", "target": "fraud", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 1, "bandwidth": 1000 } }
+    ]
+  },
+  "workloads": [],
+  "interventions": []
+}

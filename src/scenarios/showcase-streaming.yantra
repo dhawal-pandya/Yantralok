@@ -1,0 +1,514 @@
+{
+  "createdAt": "2026-07-06T00:00:00.000Z",
+  "graph": {
+    "edges": [
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 10
+        },
+        "id": "e0",
+        "source": "browser",
+        "sourceHandle": "s-t",
+        "target": "cdn",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 20
+        },
+        "id": "e1",
+        "source": "browser",
+        "sourceHandle": "s-b",
+        "target": "dns",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 1
+        },
+        "id": "e2",
+        "source": "dns",
+        "sourceHandle": "s-r",
+        "target": "firewall",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e3",
+        "source": "firewall",
+        "sourceHandle": "s-r",
+        "target": "gateway",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e4",
+        "source": "gateway",
+        "sourceHandle": "s-r",
+        "target": "lb",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e5",
+        "source": "lb",
+        "sourceHandle": "s-r",
+        "target": "api",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e6",
+        "source": "api",
+        "sourceHandle": "s-t",
+        "target": "cache",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e7",
+        "source": "api",
+        "sourceHandle": "s-r",
+        "target": "search",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e8",
+        "source": "api",
+        "sourceHandle": "s-r",
+        "target": "metadata",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e9",
+        "source": "api",
+        "sourceHandle": "s-r",
+        "target": "media",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e10",
+        "source": "api",
+        "sourceHandle": "s-b",
+        "target": "jobs",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e11",
+        "source": "jobs",
+        "sourceHandle": "s-r",
+        "target": "transcoder",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e12",
+        "source": "transcoder",
+        "sourceHandle": "s-r",
+        "target": "media",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 1
+        },
+        "id": "e13",
+        "source": "cron",
+        "sourceHandle": "s-r",
+        "target": "cleanup",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e14",
+        "source": "cleanup",
+        "sourceHandle": "s-r",
+        "target": "metadata",
+        "targetHandle": "t-l"
+      }
+    ],
+    "nodes": [
+      {
+        "config": {
+          "amplitude": 0.5,
+          "burstMs": 4000,
+          "burstStartMs": 2000,
+          "burstX": 6,
+          "connectionPool": 8,
+          "connections": false,
+          "dnsLookup": 15,
+          "dnsTtl": 30000,
+          "pattern": "ramp",
+          "periodMs": 5000,
+          "rampMs": 5000,
+          "requestRate": 800,
+          "thinkTime": 0,
+          "tlsHandshake": 30,
+          "writeRatio": 0.05
+        },
+        "id": "browser",
+        "position": {
+          "x": 0,
+          "y": 320
+        },
+        "type": "browser"
+      },
+      {
+        "config": {
+          "concurrency": 4000,
+          "evictionPolicy": "allkeys-lru",
+          "getLatency": 5,
+          "hitRatio": 0.6,
+          "maxMemoryMB": 1024,
+          "serviceDist": "exponential",
+          "workingSetMB": 0
+        },
+        "id": "cdn",
+        "position": {
+          "x": 220,
+          "y": 80
+        },
+        "type": "cdn"
+      },
+      {
+        "config": {
+          "maxConnections": 100000,
+          "serviceDist": "exponential",
+          "serviceTime": 2
+        },
+        "id": "dns",
+        "position": {
+          "x": 220,
+          "y": 520
+        },
+        "type": "dns"
+      },
+      {
+        "config": {
+          "maxConnections": 100000,
+          "serviceDist": "exponential",
+          "serviceTime": 0.5
+        },
+        "id": "firewall",
+        "position": {
+          "x": 420,
+          "y": 520
+        },
+        "type": "firewall"
+      },
+      {
+        "config": {
+          "backoff": 0,
+          "breakerCooldownMs": 3000,
+          "breakerThreshold": 0.5,
+          "circuitBreaker": false,
+          "connectionPool": 8,
+          "connections": false,
+          "dnsLookup": 15,
+          "dnsTtl": 30000,
+          "maxConnections": 10000,
+          "retries": 2,
+          "serviceDist": "exponential",
+          "serviceTime": 2,
+          "timeout": 1500,
+          "tlsHandshake": 30
+        },
+        "id": "gateway",
+        "position": {
+          "x": 620,
+          "y": 520
+        },
+        "type": "api-gateway"
+      },
+      {
+        "config": {
+          "algorithm": "least-connections",
+          "maxConnections": 60000,
+          "serviceTime": 1
+        },
+        "id": "lb",
+        "position": {
+          "x": 820,
+          "y": 520
+        },
+        "type": "load-balancer"
+      },
+      {
+        "config": {
+          "autoscale": true,
+          "backoff": 0,
+          "breakerCooldownMs": 3000,
+          "breakerThreshold": 0.5,
+          "circuitBreaker": false,
+          "concurrency": 10,
+          "connectionPool": 8,
+          "connections": true,
+          "cpuContention": 0.4,
+          "dnsLookup": 10,
+          "dnsTtl": 30000,
+          "fanout": "parallel",
+          "maxInstances": 16,
+          "minInstances": 1,
+          "provisionMs": 1000,
+          "queueCapacity": 1000,
+          "replicas": 0,
+          "retries": 2,
+          "scaleMetric": "utilization",
+          "serviceDist": "exponential",
+          "serviceTime": 8,
+          "targetRps": 5000,
+          "targetUtilization": 0.7,
+          "timeout": 1200,
+          "tlsHandshake": 20
+        },
+        "id": "api",
+        "position": {
+          "x": 1040,
+          "y": 420
+        },
+        "type": "api"
+      },
+      {
+        "config": {
+          "concurrency": 128,
+          "evictionPolicy": "allkeys-lru",
+          "getLatency": 0.5,
+          "hitRatio": 0.85,
+          "maxMemoryMB": 1024,
+          "serviceDist": "exponential",
+          "workingSetMB": 0
+        },
+        "id": "cache",
+        "position": {
+          "x": 1300,
+          "y": 120
+        },
+        "type": "memcached"
+      },
+      {
+        "config": {
+          "maxConnections": 14,
+          "queueCapacity": 500,
+          "serviceDist": "exponential",
+          "serviceTime": 12,
+          "shards": 5
+        },
+        "id": "search",
+        "position": {
+          "x": 1300,
+          "y": 300
+        },
+        "type": "elasticsearch"
+      },
+      {
+        "config": {
+          "maxConnections": 30,
+          "nodes": 6,
+          "queueCapacity": 500,
+          "quorumReplication": true,
+          "readQuorum": 2,
+          "replicationFactor": 3,
+          "serviceDist": "exponential",
+          "serviceTime": 4,
+          "writeQuorum": 2
+        },
+        "id": "metadata",
+        "position": {
+          "x": 1300,
+          "y": 480
+        },
+        "type": "cassandra"
+      },
+      {
+        "config": {
+          "maxConnections": 100000,
+          "serviceDist": "lognormal",
+          "serviceTime": 15
+        },
+        "id": "media",
+        "position": {
+          "x": 1300,
+          "y": 660
+        },
+        "type": "s3"
+      },
+      {
+        "config": {
+          "consumeTime": 5,
+          "consumers": 40,
+          "maxBacklog": 0
+        },
+        "id": "jobs",
+        "position": {
+          "x": 1300,
+          "y": 840
+        },
+        "type": "sqs"
+      },
+      {
+        "config": {
+          "autoscale": false,
+          "backoff": 0,
+          "breakerCooldownMs": 3000,
+          "breakerThreshold": 0.5,
+          "circuitBreaker": false,
+          "concurrency": 100,
+          "connectionPool": 8,
+          "connections": false,
+          "cpuContention": 0,
+          "dnsLookup": 15,
+          "dnsTtl": 30000,
+          "fanout": "sequential",
+          "maxInstances": 10,
+          "minInstances": 1,
+          "provisionMs": 2000,
+          "queueCapacity": 1000,
+          "replicas": 0,
+          "retries": 2,
+          "scaleMetric": "utilization",
+          "serviceDist": "exponential",
+          "serviceTime": 20,
+          "targetRps": 800,
+          "targetUtilization": 0.7,
+          "timeout": 1000,
+          "tlsHandshake": 30
+        },
+        "id": "transcoder",
+        "position": {
+          "x": 1560,
+          "y": 840
+        },
+        "type": "worker"
+      },
+      {
+        "config": {
+          "amplitude": 0.5,
+          "burstMs": 4000,
+          "burstStartMs": 2000,
+          "burstX": 6,
+          "connectionPool": 8,
+          "connections": false,
+          "dnsLookup": 15,
+          "dnsTtl": 30000,
+          "pattern": "periodic",
+          "periodMs": 3000,
+          "rampMs": 5000,
+          "requestRate": 6,
+          "thinkTime": 0,
+          "tlsHandshake": 30,
+          "writeRatio": 0
+        },
+        "id": "cron",
+        "position": {
+          "x": 0,
+          "y": 880
+        },
+        "type": "cron"
+      },
+      {
+        "config": {
+          "backoff": 0,
+          "breakerCooldownMs": 3000,
+          "breakerThreshold": 0.5,
+          "circuitBreaker": false,
+          "coldStartMs": 200,
+          "concurrency": 100,
+          "connectionPool": 8,
+          "connections": false,
+          "cpuContention": 0,
+          "dnsLookup": 15,
+          "dnsTtl": 30000,
+          "retries": 2,
+          "serviceDist": "exponential",
+          "serviceTime": 40,
+          "timeout": 1000,
+          "tlsHandshake": 30
+        },
+        "id": "cleanup",
+        "position": {
+          "x": 300,
+          "y": 880
+        },
+        "type": "lambda"
+      }
+    ]
+  },
+  "id": "scn-showcase-streaming-049",
+  "interventions": [
+    {
+      "atLogicalTime": 7000,
+      "id": "iv0",
+      "kind": "kill",
+      "shard": 2,
+      "target": "search"
+    },
+    {
+      "atLogicalTime": 10000,
+      "id": "iv1",
+      "kind": "restart",
+      "shard": 2,
+      "target": "search"
+    }
+  ],
+  "name": "Streaming Platform: Global Launch",
+  "schemaVersion": 1,
+  "seed": 6003,
+  "updatedAt": "2026-07-06T00:00:00.000Z",
+  "workloads": []
+}

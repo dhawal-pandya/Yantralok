@@ -1,0 +1,922 @@
+{
+  "createdAt": "2026-07-07T00:00:00.000Z",
+  "graph": {
+    "edges": [
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 10
+        },
+        "id": "e0",
+        "source": "browser",
+        "sourceHandle": "s-r",
+        "target": "cloudfront",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 4
+        },
+        "id": "e1",
+        "source": "cloudfront",
+        "sourceHandle": "s-r",
+        "target": "dns",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 1
+        },
+        "id": "e2",
+        "source": "dns",
+        "sourceHandle": "s-r",
+        "target": "firewall",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e3",
+        "source": "firewall",
+        "sourceHandle": "s-r",
+        "target": "gateway",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e4",
+        "source": "gateway",
+        "sourceHandle": "s-r",
+        "target": "lb",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 12
+        },
+        "id": "e5",
+        "source": "client",
+        "sourceHandle": "s-r",
+        "target": "cdn",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 4
+        },
+        "id": "e6",
+        "source": "cdn",
+        "sourceHandle": "s-r",
+        "target": "router",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e7",
+        "source": "router",
+        "sourceHandle": "s-r",
+        "target": "switch",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e8",
+        "source": "switch",
+        "sourceHandle": "s-r",
+        "target": "proxy",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e9",
+        "source": "proxy",
+        "sourceHandle": "s-r",
+        "target": "ingress",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e10",
+        "source": "ingress",
+        "sourceHandle": "s-r",
+        "target": "lb",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e11",
+        "source": "lb",
+        "sourceHandle": "s-r",
+        "target": "api",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e12",
+        "source": "api",
+        "sourceHandle": "s-r",
+        "target": "user-svc",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e13",
+        "source": "api",
+        "sourceHandle": "s-r",
+        "target": "catalog-svc",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e14",
+        "source": "api",
+        "sourceHandle": "s-r",
+        "target": "mysql",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e15",
+        "source": "api",
+        "sourceHandle": "s-r",
+        "target": "cassandra",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e16",
+        "source": "api",
+        "sourceHandle": "s-r",
+        "target": "search",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e17",
+        "source": "api",
+        "sourceHandle": "s-r",
+        "target": "s3",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e18",
+        "source": "api",
+        "sourceHandle": "s-r",
+        "target": "lambda",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e19",
+        "source": "api",
+        "sourceHandle": "s-r",
+        "target": "kafka",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e20",
+        "source": "api",
+        "sourceHandle": "s-r",
+        "target": "sqs",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e21",
+        "source": "api",
+        "sourceHandle": "s-r",
+        "target": "nats",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e22",
+        "source": "api",
+        "sourceHandle": "s-r",
+        "target": "rabbitmq",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e23",
+        "source": "user-svc",
+        "sourceHandle": "s-r",
+        "target": "redis",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e24",
+        "source": "redis",
+        "sourceHandle": "s-r",
+        "target": "postgres",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e25",
+        "source": "catalog-svc",
+        "sourceHandle": "s-r",
+        "target": "memcached",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e26",
+        "source": "memcached",
+        "sourceHandle": "s-r",
+        "target": "mongodb",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e27",
+        "source": "kafka",
+        "sourceHandle": "s-r",
+        "target": "worker-events",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e28",
+        "source": "worker-events",
+        "sourceHandle": "s-r",
+        "target": "postgres",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e29",
+        "source": "sqs",
+        "sourceHandle": "s-r",
+        "target": "worker-tasks",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e30",
+        "source": "worker-tasks",
+        "sourceHandle": "s-r",
+        "target": "s3",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 1
+        },
+        "id": "e31",
+        "source": "cron",
+        "sourceHandle": "s-r",
+        "target": "queue",
+        "targetHandle": "t-l"
+      },
+      {
+        "config": {
+          "bandwidth": 1000,
+          "jitter": 0,
+          "latency": 0.5
+        },
+        "id": "e32",
+        "source": "queue",
+        "sourceHandle": "s-r",
+        "target": "mongodb",
+        "targetHandle": "t-l"
+      }
+    ],
+    "nodes": [
+      {
+        "config": {
+          "requestRate": 900,
+          "pattern": "ramp",
+          "rampMs": 4000,
+          "writeRatio": 0.1,
+          "thinkTime": 0,
+          "connections": false
+        },
+        "id": "browser",
+        "position": {
+          "x": 0,
+          "y": 120
+        },
+        "type": "browser"
+      },
+      {
+        "config": {
+          "requestRate": 600,
+          "pattern": "ramp",
+          "rampMs": 4000,
+          "writeRatio": 0.1,
+          "thinkTime": 0,
+          "connections": false
+        },
+        "id": "client",
+        "position": {
+          "x": 0,
+          "y": 420
+        },
+        "type": "client"
+      },
+      {
+        "config": {
+          "requestRate": 10,
+          "pattern": "periodic",
+          "periodMs": 2000,
+          "writeRatio": 0
+        },
+        "id": "cron",
+        "position": {
+          "x": 0,
+          "y": 900
+        },
+        "type": "cron"
+      },
+      {
+        "config": {
+          "hitRatio": 0.7,
+          "concurrency": 1000,
+          "getLatency": 6,
+          "maxMemoryMB": 8192,
+          "serviceDist": "exponential",
+          "workingSetMB": 0,
+          "evictionPolicy": "allkeys-lru"
+        },
+        "id": "cloudfront",
+        "position": {
+          "x": 240,
+          "y": 120
+        },
+        "type": "cloudfront"
+      },
+      {
+        "config": {
+          "hitRatio": 0.7,
+          "concurrency": 1000,
+          "getLatency": 5,
+          "maxMemoryMB": 8192,
+          "serviceDist": "exponential",
+          "workingSetMB": 0,
+          "evictionPolicy": "allkeys-lru"
+        },
+        "id": "cdn",
+        "position": {
+          "x": 240,
+          "y": 420
+        },
+        "type": "cdn"
+      },
+      {
+        "config": {
+          "serviceTime": 1,
+          "maxConnections": 100000,
+          "serviceDist": "exponential"
+        },
+        "id": "dns",
+        "position": {
+          "x": 480,
+          "y": 120
+        },
+        "type": "dns"
+      },
+      {
+        "config": {
+          "serviceTime": 0.5,
+          "maxConnections": 100000,
+          "serviceDist": "exponential"
+        },
+        "id": "firewall",
+        "position": {
+          "x": 720,
+          "y": 120
+        },
+        "type": "firewall"
+      },
+      {
+        "config": {
+          "serviceTime": 2,
+          "maxConnections": 20000,
+          "serviceDist": "exponential",
+          "retries": 2,
+          "timeout": 2000,
+          "circuitBreaker": false,
+          "connections": false
+        },
+        "id": "gateway",
+        "position": {
+          "x": 960,
+          "y": 120
+        },
+        "type": "api-gateway"
+      },
+      {
+        "config": {
+          "serviceTime": 0.2,
+          "maxConnections": 100000,
+          "serviceDist": "exponential"
+        },
+        "id": "router",
+        "position": {
+          "x": 480,
+          "y": 420
+        },
+        "type": "router"
+      },
+      {
+        "config": {
+          "serviceTime": 0.05,
+          "maxConnections": 100000,
+          "serviceDist": "exponential"
+        },
+        "id": "switch",
+        "position": {
+          "x": 720,
+          "y": 420
+        },
+        "type": "switch"
+      },
+      {
+        "config": {
+          "serviceTime": 1,
+          "maxConnections": 100000,
+          "serviceDist": "exponential"
+        },
+        "id": "proxy",
+        "position": {
+          "x": 960,
+          "y": 420
+        },
+        "type": "reverse-proxy"
+      },
+      {
+        "config": {
+          "serviceTime": 1,
+          "maxConnections": 50000,
+          "serviceDist": "exponential"
+        },
+        "id": "ingress",
+        "position": {
+          "x": 1200,
+          "y": 420
+        },
+        "type": "ingress"
+      },
+      {
+        "config": {
+          "serviceTime": 1,
+          "maxConnections": 60000,
+          "algorithm": "least-connections"
+        },
+        "id": "lb",
+        "position": {
+          "x": 1440,
+          "y": 270
+        },
+        "type": "load-balancer"
+      },
+      {
+        "config": {
+          "autoscale": true,
+          "minInstances": 3,
+          "maxInstances": 20,
+          "concurrency": 16,
+          "serviceTime": 8,
+          "serviceDist": "exponential",
+          "fanout": "parallel",
+          "targetUtilization": 0.6,
+          "scaleMetric": "utilization",
+          "provisionMs": 1000,
+          "queueCapacity": 3000,
+          "retries": 2,
+          "timeout": 2000,
+          "connections": true,
+          "cpuContention": 0.3,
+          "connectionPool": 16,
+          "dnsLookup": 8,
+          "dnsTtl": 30000,
+          "tlsHandshake": 15,
+          "backoff": 0,
+          "circuitBreaker": false,
+          "breakerThreshold": 0.5,
+          "breakerCooldownMs": 3000,
+          "replicas": 0
+        },
+        "id": "api",
+        "position": {
+          "x": 1700,
+          "y": 320
+        },
+        "type": "api"
+      },
+      {
+        "config": {
+          "autoscale": false,
+          "concurrency": 120,
+          "serviceTime": 3,
+          "serviceDist": "exponential",
+          "fanout": "sequential",
+          "queueCapacity": 3000,
+          "retries": 2,
+          "timeout": 2000,
+          "connections": false
+        },
+        "id": "user-svc",
+        "position": {
+          "x": 2000,
+          "y": -160
+        },
+        "type": "api"
+      },
+      {
+        "config": {
+          "autoscale": false,
+          "concurrency": 120,
+          "serviceTime": 3,
+          "serviceDist": "exponential",
+          "fanout": "sequential",
+          "queueCapacity": 3000,
+          "retries": 2,
+          "timeout": 2000,
+          "connections": false
+        },
+        "id": "catalog-svc",
+        "position": {
+          "x": 2000,
+          "y": 0
+        },
+        "type": "api"
+      },
+      {
+        "config": {
+          "maxConnections": 400,
+          "serviceTime": 5,
+          "serviceDist": "exponential",
+          "replicas": 2,
+          "replicationLagMs": 15,
+          "queueCapacity": 3000
+        },
+        "id": "mysql",
+        "position": {
+          "x": 2000,
+          "y": 160
+        },
+        "type": "mysql"
+      },
+      {
+        "config": {
+          "maxConnections": 160,
+          "nodes": 9,
+          "serviceTime": 3,
+          "serviceDist": "exponential",
+          "quorumReplication": true,
+          "replicationFactor": 3,
+          "readQuorum": 2,
+          "writeQuorum": 2,
+          "queueCapacity": 3000
+        },
+        "id": "cassandra",
+        "position": {
+          "x": 2000,
+          "y": 300
+        },
+        "type": "cassandra"
+      },
+      {
+        "config": {
+          "maxConnections": 90,
+          "shards": 5,
+          "serviceTime": 10,
+          "serviceDist": "exponential",
+          "queueCapacity": 3000
+        },
+        "id": "search",
+        "position": {
+          "x": 2000,
+          "y": 440
+        },
+        "type": "elasticsearch"
+      },
+      {
+        "config": {
+          "maxConnections": 100000,
+          "serviceTime": 15,
+          "serviceDist": "lognormal"
+        },
+        "id": "s3",
+        "position": {
+          "x": 2000,
+          "y": 580
+        },
+        "type": "s3"
+      },
+      {
+        "config": {
+          "concurrency": 400,
+          "serviceTime": 20,
+          "coldStartMs": 100,
+          "serviceDist": "exponential",
+          "queueCapacity": 3000,
+          "retries": 2,
+          "timeout": 2000,
+          "connections": false
+        },
+        "id": "lambda",
+        "position": {
+          "x": 2000,
+          "y": 720
+        },
+        "type": "lambda"
+      },
+      {
+        "config": {
+          "concurrency": 400,
+          "getLatency": 0.4,
+          "hitRatio": 0.9,
+          "maxMemoryMB": 8192,
+          "serviceDist": "exponential",
+          "workingSetMB": 0,
+          "evictionPolicy": "allkeys-lru"
+        },
+        "id": "redis",
+        "position": {
+          "x": 2340,
+          "y": -220
+        },
+        "type": "redis"
+      },
+      {
+        "config": {
+          "concurrency": 300,
+          "getLatency": 0.5,
+          "hitRatio": 0.9,
+          "maxMemoryMB": 8192,
+          "serviceDist": "exponential",
+          "workingSetMB": 0,
+          "evictionPolicy": "allkeys-lru"
+        },
+        "id": "memcached",
+        "position": {
+          "x": 2340,
+          "y": -40
+        },
+        "type": "memcached"
+      },
+      {
+        "config": {
+          "consumers": 72,
+          "consumeTime": 5,
+          "maxBacklog": 0,
+          "subscriberGroups": 1
+        },
+        "id": "kafka",
+        "position": {
+          "x": 2000,
+          "y": 900
+        },
+        "type": "kafka"
+      },
+      {
+        "config": {
+          "consumers": 112,
+          "consumeTime": 8,
+          "maxBacklog": 0
+        },
+        "id": "sqs",
+        "position": {
+          "x": 2000,
+          "y": 1040
+        },
+        "type": "sqs"
+      },
+      {
+        "config": {
+          "consumers": 40,
+          "consumeTime": 5,
+          "maxBacklog": 0,
+          "subscriberGroups": 1
+        },
+        "id": "nats",
+        "position": {
+          "x": 2000,
+          "y": 1180
+        },
+        "type": "nats"
+      },
+      {
+        "config": {
+          "consumers": 48,
+          "consumeTime": 8,
+          "maxBacklog": 0
+        },
+        "id": "rabbitmq",
+        "position": {
+          "x": 2000,
+          "y": 1320
+        },
+        "type": "rabbitmq"
+      },
+      {
+        "config": {
+          "consumers": 12,
+          "consumeTime": 10,
+          "maxBacklog": 0
+        },
+        "id": "queue",
+        "position": {
+          "x": 480,
+          "y": 900
+        },
+        "type": "queue"
+      },
+      {
+        "config": {
+          "maxConnections": 400,
+          "serviceTime": 4,
+          "serviceDist": "exponential",
+          "replicas": 2,
+          "replicationLagMs": 20,
+          "queueCapacity": 3000
+        },
+        "id": "postgres",
+        "position": {
+          "x": 2680,
+          "y": -220
+        },
+        "type": "postgres"
+      },
+      {
+        "config": {
+          "maxConnections": 400,
+          "serviceTime": 4,
+          "serviceDist": "exponential",
+          "queueCapacity": 3000
+        },
+        "id": "mongodb",
+        "position": {
+          "x": 2680,
+          "y": -40
+        },
+        "type": "mongodb"
+      },
+      {
+        "config": {
+          "autoscale": false,
+          "concurrency": 250,
+          "serviceTime": 5,
+          "serviceDist": "exponential",
+          "fanout": "sequential",
+          "queueCapacity": 4000,
+          "retries": 2,
+          "timeout": 2000,
+          "cpuContention": 0,
+          "connections": false
+        },
+        "id": "worker-events",
+        "position": {
+          "x": 2320,
+          "y": 900
+        },
+        "type": "worker"
+      },
+      {
+        "config": {
+          "autoscale": false,
+          "concurrency": 250,
+          "serviceTime": 8,
+          "serviceDist": "exponential",
+          "fanout": "sequential",
+          "queueCapacity": 4000,
+          "retries": 2,
+          "timeout": 2000
+        },
+        "id": "worker-tasks",
+        "position": {
+          "x": 2320,
+          "y": 1040
+        },
+        "type": "worker"
+      }
+    ]
+  },
+  "id": "scn-showcase-frankenstein-051",
+  "interventions": [],
+  "name": "Frankenstein: The Whole Catalog",
+  "schemaVersion": 1,
+  "seed": 7001,
+  "updatedAt": "2026-07-07T00:00:00.000Z",
+  "workloads": []
+}

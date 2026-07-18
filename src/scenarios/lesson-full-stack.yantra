@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "id": "scn-lesson-fullstack-00000039",
+  "name": "Lesson 10: The Full Stack",
+  "createdAt": "2026-07-04T00:00:00.000Z",
+  "updatedAt": "2026-07-04T00:00:00.000Z",
+  "seed": 1110,
+  "graph": {
+    "nodes": [
+      {
+        "id": "client",
+        "type": "client",
+        "position": { "x": 0, "y": 160 },
+        "config": { "requestRate": 1200, "thinkTime": 0, "writeRatio": 0.1 }
+      },
+      {
+        "id": "cdn",
+        "type": "cdn",
+        "position": { "x": 200, "y": 20 },
+        "config": { "concurrency": 1000, "getLatency": 6, "hitRatio": 0.85 }
+      },
+      {
+        "id": "gateway",
+        "type": "api-gateway",
+        "position": { "x": 200, "y": 280 },
+        "config": { "serviceTime": 2, "timeout": 1000, "retries": 2 }
+      },
+      {
+        "id": "api",
+        "type": "api",
+        "position": { "x": 430, "y": 280 },
+        "config": { "concurrency": 16, "serviceTime": 10, "timeout": 1000, "retries": 2, "autoscale": true, "scaleMetric": "utilization", "targetUtilization": 0.7, "minInstances": 1, "maxInstances": 6, "provisionMs": 1000 }
+      },
+      {
+        "id": "redis",
+        "type": "redis",
+        "position": { "x": 660, "y": 160 },
+        "config": { "concurrency": 16, "getLatency": 1, "hitRatio": 0.85 }
+      },
+      {
+        "id": "postgres",
+        "type": "postgres",
+        "position": { "x": 660, "y": 400 },
+        "config": { "maxConnections": 20, "serviceTime": 8, "replicas": 2, "replicationLagMs": 5 }
+      }
+    ],
+    "edges": [
+      {
+        "id": "e-client-cdn",
+        "source": "client",
+        "target": "cdn",
+        "sourceHandle": "s-t",
+        "targetHandle": "t-l",
+        "config": { "latency": 12, "bandwidth": 1000 }
+      },
+      {
+        "id": "e-client-gw",
+        "source": "client",
+        "target": "gateway",
+        "sourceHandle": "s-b",
+        "targetHandle": "t-l",
+        "config": { "latency": 40, "bandwidth": 1000 }
+      },
+      {
+        "id": "e-gw-api",
+        "source": "gateway",
+        "target": "api",
+        "sourceHandle": "s-r",
+        "targetHandle": "t-l",
+        "config": { "latency": 0.5, "bandwidth": 1000 }
+      },
+      {
+        "id": "e-api-redis",
+        "source": "api",
+        "target": "redis",
+        "sourceHandle": "s-t",
+        "targetHandle": "t-l",
+        "config": { "latency": 0.5, "bandwidth": 1000 }
+      },
+      {
+        "id": "e-api-pg",
+        "source": "api",
+        "target": "postgres",
+        "sourceHandle": "s-b",
+        "targetHandle": "t-l",
+        "config": { "latency": 0.5, "bandwidth": 1000 }
+      }
+    ]
+  },
+  "workloads": [],
+  "interventions": [
+    { "id": "kill-cdn", "atLogicalTime": 5000, "kind": "kill", "target": "cdn" }
+  ]
+}

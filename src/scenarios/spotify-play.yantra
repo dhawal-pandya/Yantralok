@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "scn-spotify-play-0000000000024",
+  "name": "Spotify: Track Play",
+  "createdAt": "2026-01-01T00:00:00.000Z",
+  "updatedAt": "2026-01-01T00:00:00.000Z",
+  "seed": 6004,
+  "graph": {
+    "nodes": [
+      { "id": "client", "type": "client", "position": { "x": 0, "y": 200 }, "config": { "requestRate": 4000 } },
+      { "id": "gateway", "type": "api-gateway", "position": { "x": 240, "y": 200 }, "config": { "serviceTime": 2, "timeout": 1000, "retries": 2 } },
+      { "id": "lb", "type": "load-balancer", "position": { "x": 470, "y": 200 }, "config": { "algorithm": "round-robin" } },
+      { "id": "api-a", "type": "api", "position": { "x": 700, "y": 90 }, "config": { "concurrency": 200, "serviceTime": 8, "timeout": 1000, "retries": 2 } },
+      { "id": "api-b", "type": "api", "position": { "x": 700, "y": 310 }, "config": { "concurrency": 200, "serviceTime": 8, "timeout": 1000, "retries": 2 } },
+      { "id": "cassandra", "type": "cassandra", "position": { "x": 950, "y": 90 }, "config": { "maxConnections": 120, "serviceTime": 4 } },
+      { "id": "s3", "type": "s3", "position": { "x": 950, "y": 310 }, "config": { "avgObjectKB": 200, "serviceTime": 35, "serviceDist": "lognormal" } }
+    ],
+    "edges": [
+      { "id": "e-cl-gw", "source": "client", "target": "gateway", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 40, "bandwidth": 1000 } },
+      { "id": "e-gw-lb", "source": "gateway", "target": "lb", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-lb-a", "source": "lb", "target": "api-a", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-lb-b", "source": "lb", "target": "api-b", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-a-cas", "source": "api-a", "target": "cassandra", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-a-s3", "source": "api-a", "target": "s3", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 2, "bandwidth": 1000 } },
+      { "id": "e-b-cas", "source": "api-b", "target": "cassandra", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-b-s3", "source": "api-b", "target": "s3", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 2, "bandwidth": 1000 } }
+    ]
+  },
+  "workloads": [],
+  "interventions": []
+}

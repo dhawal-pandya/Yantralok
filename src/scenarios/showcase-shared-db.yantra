@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "id": "scn-showcase-shared-db-000040",
+  "name": "Shared Database: One Pool, Two Services",
+  "createdAt": "2026-07-05T00:00:00.000Z",
+  "updatedAt": "2026-07-05T00:00:00.000Z",
+  "seed": 5040,
+  "graph": {
+    "nodes": [
+      {
+        "id": "orders-client",
+        "type": "client",
+        "position": { "x": 0, "y": 40 },
+        "config": { "requestRate": 250, "thinkTime": 0, "pattern": "burst", "burstX": 8, "burstStartMs": 3000, "burstMs": 3000 }
+      },
+      {
+        "id": "inventory-client",
+        "type": "client",
+        "position": { "x": 0, "y": 280 },
+        "config": { "requestRate": 250, "thinkTime": 0 }
+      },
+      {
+        "id": "orders-api",
+        "type": "api",
+        "position": { "x": 240, "y": 40 },
+        "config": { "concurrency": 100000, "serviceTime": 4, "queueCapacity": 100000, "timeout": 2000, "retries": 0 }
+      },
+      {
+        "id": "inventory-api",
+        "type": "api",
+        "position": { "x": 240, "y": 280 },
+        "config": { "concurrency": 100000, "serviceTime": 4, "queueCapacity": 100000, "timeout": 2000, "retries": 0 }
+      },
+      {
+        "id": "postgres",
+        "type": "postgres",
+        "position": { "x": 500, "y": 160 },
+        "config": { "maxConnections": 20, "serviceTime": 10, "queueCapacity": 100000, "replicas": 0 }
+      }
+    ],
+    "edges": [
+      {
+        "id": "e-oc-oa",
+        "source": "orders-client",
+        "target": "orders-api",
+        "sourceHandle": "s-r",
+        "targetHandle": "t-l",
+        "config": { "latency": 20, "bandwidth": 1000 }
+      },
+      {
+        "id": "e-ic-ia",
+        "source": "inventory-client",
+        "target": "inventory-api",
+        "sourceHandle": "s-r",
+        "targetHandle": "t-l",
+        "config": { "latency": 20, "bandwidth": 1000 }
+      },
+      {
+        "id": "e-oa-pg",
+        "source": "orders-api",
+        "target": "postgres",
+        "sourceHandle": "s-r",
+        "targetHandle": "t-l",
+        "config": { "latency": 1, "bandwidth": 1000 }
+      },
+      {
+        "id": "e-ia-pg",
+        "source": "inventory-api",
+        "target": "postgres",
+        "sourceHandle": "s-r",
+        "targetHandle": "t-l",
+        "config": { "latency": 1, "bandwidth": 1000 }
+      }
+    ]
+  },
+  "workloads": [],
+  "interventions": []
+}

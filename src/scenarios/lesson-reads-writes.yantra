@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "id": "scn-lesson-writes-000000000036",
+  "name": "Lesson 6: Reads vs Writes",
+  "createdAt": "2026-07-04T00:00:00.000Z",
+  "updatedAt": "2026-07-04T00:00:00.000Z",
+  "seed": 1106,
+  "graph": {
+    "nodes": [
+      {
+        "id": "client",
+        "type": "client",
+        "position": { "x": 0, "y": 160 },
+        "config": { "requestRate": 400, "thinkTime": 0, "writeRatio": 0.5 }
+      },
+      {
+        "id": "api",
+        "type": "api",
+        "position": { "x": 220, "y": 160 },
+        "config": { "concurrency": 200, "serviceTime": 8, "timeout": 1000, "retries": 2 }
+      },
+      {
+        "id": "redis",
+        "type": "redis",
+        "position": { "x": 460, "y": 40 },
+        "config": { "concurrency": 16, "getLatency": 1, "hitRatio": 1 }
+      },
+      {
+        "id": "postgres",
+        "type": "postgres",
+        "position": { "x": 460, "y": 280 },
+        "config": { "maxConnections": 8, "serviceTime": 20 }
+      }
+    ],
+    "edges": [
+      {
+        "id": "e-client-api",
+        "source": "client",
+        "target": "api",
+        "sourceHandle": "s-r",
+        "targetHandle": "t-l",
+        "config": { "latency": 40, "bandwidth": 1000 }
+      },
+      {
+        "id": "e-api-redis",
+        "source": "api",
+        "target": "redis",
+        "sourceHandle": "s-t",
+        "targetHandle": "t-l",
+        "config": { "latency": 0.5, "bandwidth": 1000 }
+      },
+      {
+        "id": "e-api-pg",
+        "source": "api",
+        "target": "postgres",
+        "sourceHandle": "s-b",
+        "targetHandle": "t-l",
+        "config": { "latency": 0.5, "bandwidth": 1000 }
+      }
+    ]
+  },
+  "workloads": [],
+  "interventions": []
+}

@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "scn-netflix-0000-0000-000000000010",
+  "name": "Netflix: Stream Start",
+  "createdAt": "2026-01-01T00:00:00.000Z",
+  "updatedAt": "2026-07-04T00:00:00.000Z",
+  "seed": 5010,
+  "graph": {
+    "nodes": [
+      { "id": "client", "type": "client", "position": { "x": 0, "y": 220 }, "config": { "requestRate": 4000 } },
+      { "id": "cdn", "type": "cdn", "position": { "x": 250, "y": 70 }, "config": { "avgObjectKB": 2000, "concurrency": 2000, "getLatency": 8, "hitRatio": 0.95 } },
+      { "id": "gateway", "type": "api-gateway", "position": { "x": 250, "y": 360 }, "config": { "serviceTime": 2, "timeout": 1000, "retries": 2 } },
+      { "id": "api", "type": "api", "position": { "x": 500, "y": 360 }, "config": { "concurrency": 32, "serviceTime": 15, "timeout": 1000, "retries": 2, "autoscale": true, "scaleMetric": "utilization", "targetUtilization": 0.7, "minInstances": 5, "maxInstances": 8, "provisionMs": 1000 } },
+      { "id": "evcache", "type": "memcached", "position": { "x": 760, "y": 220 }, "config": { "concurrency": 32, "getLatency": 0.5, "hitRatio": 0.9 } },
+      { "id": "cassandra", "type": "cassandra", "position": { "x": 760, "y": 360 }, "config": { "maxConnections": 80, "serviceTime": 5 } },
+      { "id": "s3", "type": "s3", "position": { "x": 760, "y": 500 }, "config": { "avgObjectKB": 2000, "serviceTime": 15, "serviceDist": "lognormal" } }
+    ],
+    "edges": [
+      { "id": "e-cl-cdn", "source": "client", "target": "cdn", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 12, "bandwidth": 1000 } },
+      { "id": "e-cl-gw", "source": "client", "target": "gateway", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 40, "bandwidth": 1000 } },
+      { "id": "e-gw-api", "source": "gateway", "target": "api", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-api-ev", "source": "api", "target": "evcache", "sourceHandle": "s-t", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-api-cas", "source": "api", "target": "cassandra", "sourceHandle": "s-r", "targetHandle": "t-l", "config": { "latency": 0.5, "bandwidth": 1000 } },
+      { "id": "e-api-s3", "source": "api", "target": "s3", "sourceHandle": "s-b", "targetHandle": "t-l", "config": { "latency": 1, "bandwidth": 1000 } }
+    ]
+  },
+  "workloads": [],
+  "interventions": [
+    { "id": "kill-cdn", "atLogicalTime": 4000, "kind": "kill", "target": "cdn" }
+  ]
+}

@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "id": "scn-lesson-scale-out-00000034",
+  "name": "Lesson 2: Scale Out & Survive a Kill",
+  "createdAt": "2026-07-04T00:00:00.000Z",
+  "updatedAt": "2026-07-04T00:00:00.000Z",
+  "seed": 1102,
+  "graph": {
+    "nodes": [
+      {
+        "id": "client",
+        "type": "client",
+        "position": { "x": 0, "y": 160 },
+        "config": { "requestRate": 900, "thinkTime": 0 }
+      },
+      {
+        "id": "lb",
+        "type": "load-balancer",
+        "position": { "x": 220, "y": 160 },
+        "config": { "algorithm": "round-robin" }
+      },
+      {
+        "id": "api-a",
+        "type": "api",
+        "position": { "x": 440, "y": 20 },
+        "config": { "concurrency": 8, "serviceTime": 10, "queueCapacity": 200, "timeout": 1000, "retries": 2 }
+      },
+      {
+        "id": "api-b",
+        "type": "api",
+        "position": { "x": 440, "y": 160 },
+        "config": { "concurrency": 8, "serviceTime": 10, "queueCapacity": 200, "timeout": 1000, "retries": 2 }
+      },
+      {
+        "id": "api-c",
+        "type": "api",
+        "position": { "x": 440, "y": 300 },
+        "config": { "concurrency": 8, "serviceTime": 10, "queueCapacity": 200, "timeout": 1000, "retries": 2 }
+      },
+      {
+        "id": "postgres",
+        "type": "postgres",
+        "position": { "x": 680, "y": 160 },
+        "config": { "maxConnections": 100, "serviceTime": 5 }
+      }
+    ],
+    "edges": [
+      {
+        "id": "e-client-lb",
+        "source": "client",
+        "target": "lb",
+        "sourceHandle": "s-r",
+        "targetHandle": "t-l",
+        "config": { "latency": 40, "bandwidth": 1000 }
+      },
+      {
+        "id": "e-lb-a",
+        "source": "lb",
+        "target": "api-a",
+        "sourceHandle": "s-t",
+        "targetHandle": "t-l",
+        "config": { "latency": 0.5, "bandwidth": 1000 }
+      },
+      {
+        "id": "e-lb-b",
+        "source": "lb",
+        "target": "api-b",
+        "sourceHandle": "s-r",
+        "targetHandle": "t-l",
+        "config": { "latency": 0.5, "bandwidth": 1000 }
+      },
+      {
+        "id": "e-lb-c",
+        "source": "lb",
+        "target": "api-c",
+        "sourceHandle": "s-b",
+        "targetHandle": "t-l",
+        "config": { "latency": 0.5, "bandwidth": 1000 }
+      },
+      {
+        "id": "e-a-pg",
+        "source": "api-a",
+        "target": "postgres",
+        "sourceHandle": "s-r",
+        "targetHandle": "t-t",
+        "config": { "latency": 0.5, "bandwidth": 1000 }
+      },
+      {
+        "id": "e-b-pg",
+        "source": "api-b",
+        "target": "postgres",
+        "sourceHandle": "s-r",
+        "targetHandle": "t-l",
+        "config": { "latency": 0.5, "bandwidth": 1000 }
+      },
+      {
+        "id": "e-c-pg",
+        "source": "api-c",
+        "target": "postgres",
+        "sourceHandle": "s-r",
+        "targetHandle": "t-b",
+        "config": { "latency": 0.5, "bandwidth": 1000 }
+      }
+    ]
+  },
+  "workloads": [],
+  "interventions": [
+    { "id": "kill-b", "atLogicalTime": 4000, "kind": "kill", "target": "api-b" },
+    { "id": "restart-b", "atLogicalTime": 7000, "kind": "restart", "target": "api-b" }
+  ]
+}
