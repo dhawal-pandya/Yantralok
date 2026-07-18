@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# pre-push: build the app and publish dist/ to the gh-pages branch.
+# pre-push: intercept pushes and deploy to gh-pages.
 #
 # Enable once (after `git init` + adding a remote):
 #     git config core.hooksPath .githooks
@@ -8,14 +8,11 @@
 # Requires git >= 2.23 (for `git switch`).
 set -euo pipefail
 
-# --- config -----------------------------------------------------------------
 REMOTE="origin"
 DEPLOY_BRANCH="gh-pages"
-BUILD_CMD="npm run build"
-BUILD_DIR="dist"
 
 # --- recursion guard --------------------------------------------------------
-# The deploy step below runs `git push`, which re-triggers this hook. Bail.
+# The deploy script runs `git push`, which re-triggers this hook. Bail.
 [ "${YANTRALOK_DEPLOYING:-}" = "1" ] && exit 0
 
 # --- decide whether this push should deploy ---------------------------------
@@ -30,47 +27,10 @@ while read -r _local_ref _local_sha remote_ref _remote_sha; do
 done
 $deploy || exit 0
 
-# --- resolve repo, shed inherited git env so worktree ops are clean ---------
+# --- delegate to the deploy script -------------------------------------------
 REPO_ROOT="$(git rev-parse --show-toplevel)"
-SRC_SHA="$(git rev-parse --short HEAD 2>/dev/null || echo unknown)"
 unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_PREFIX
 cd "$REPO_ROOT"
 
-echo "[pre-push] building ($BUILD_CMD)..."
-$BUILD_CMD
-
-[ -d "$BUILD_DIR" ] || { echo "[pre-push] '$BUILD_DIR' not produced, aborting." >&2; exit 1; }
-
-# --- publish dist/ to gh-pages via a throwaway worktree ---------------------
-WORKTREE="$(mktemp -d)"
-cleanup() { git worktree remove --force "$WORKTREE" 2>/dev/null || rm -rf "$WORKTREE"; }
-trap cleanup EXIT
-
-git worktree add --detach "$WORKTREE" >/dev/null
-
-(
-  cd "$WORKTREE"
-
-  if git show-ref --verify --quiet "refs/heads/$DEPLOY_BRANCH"; then
-    git switch "$DEPLOY_BRANCH"
-  elif git ls-remote --exit-code --heads "$REMOTE" "$DEPLOY_BRANCH" >/dev/null 2>&1; then
-    git switch -c "$DEPLOY_BRANCH" --track "$REMOTE/$DEPLOY_BRANCH"
-  else
-    git switch --orphan "$DEPLOY_BRANCH"
-  fi
-
-  # Replace tracked contents with the fresh build (keep the .git worktree file).
-  find . -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
-  cp -R "$REPO_ROOT/$BUILD_DIR/." .
-  touch .nojekyll   # stop GitHub Pages from running the output through Jekyll
-
-  git add -A
-  if git diff --cached --quiet; then
-    echo "[pre-push] gh-pages already current, nothing to deploy."
-    exit 0
-  fi
-
-  git commit -q -m "deploy: build $SRC_SHA at $(date -u +%Y-%m-%dT%H:%M:%SZ)"
-  YANTRALOK_DEPLOYING=1 git push "$REMOTE" "$DEPLOY_BRANCH"
-  echo "[pre-push] published to $REMOTE/$DEPLOY_BRANCH."
-)
+export YANTRALOK_DEPLOYING=1
+bash ./scripts/deploy.sh

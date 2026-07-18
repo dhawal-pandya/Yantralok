@@ -12,7 +12,8 @@
     "test:watch": "vitest",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "check": "npm run lint && npm run test"
+    "check": "npm run lint && npm run test",
+    "deploy": "bash ./scripts/deploy.sh"
   },
   "dependencies": {
     "@radix-ui/react-tooltip": "^1.2.10",
