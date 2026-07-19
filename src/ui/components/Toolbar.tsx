@@ -14,7 +14,6 @@ import { ScenarioGuide } from "./ScenarioGuide";
 import { Tip } from "./Tooltip";
 
 const STATUS_LABEL = {
-  idle: "-",
   saving: "saving…",
   saved: "saved",
   error: "save failed",
@@ -224,9 +223,7 @@ export function Toolbar() {
                   ? "bg-emerald-500"
                   : status === "saving"
                     ? "bg-amber-400"
-                    : status === "error"
-                      ? "bg-red-500"
-                      : "bg-neutral-600"
+                    : "bg-red-500"
               }`}
             />
             {STATUS_LABEL[status]}

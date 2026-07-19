@@ -42,7 +42,7 @@ export type Selection =
   | { kind: "edge"; id: string }
   | null;
 
-export type SaveStatus = "idle" | "saving" | "saved" | "error";
+export type SaveStatus = "saving" | "saved" | "error";
 
 export interface SystemState {
   doc: SystemDoc | null;
@@ -108,7 +108,7 @@ export function makeSystemStore(deps?: {
       doc: null,
       systems: [],
       selection: null,
-      status: "idle",
+      status: "saved", // never shown before init() runs; the app renders "Loading…" until ready
       ready: false,
 
       async init() {
