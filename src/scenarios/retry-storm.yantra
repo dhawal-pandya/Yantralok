@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "scn-retry-storm-0000-000000000003",
-  "name": "Lesson 5: Retry Storm",
+  "name": "Lesson 2: Retry Storm",
   "createdAt": "2026-01-01T00:00:00.000Z",
   "updatedAt": "2026-01-01T00:00:00.000Z",
   "seed": 3030,

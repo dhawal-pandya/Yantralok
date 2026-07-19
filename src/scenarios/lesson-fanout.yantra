@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "scn-lesson-fanout-000000000038",
-  "name": "Lesson 9: Fan-out & the Critical Path",
+  "name": "Lesson 6: Fan-out & the Critical Path",
   "createdAt": "2026-07-04T00:00:00.000Z",
   "updatedAt": "2026-07-04T00:00:00.000Z",
   "seed": 1109,

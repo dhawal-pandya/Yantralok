@@ -31,6 +31,7 @@ interface Persisted {
   glowSignal: GlowSignal;
   tourSeen: boolean; // the guided tour shows exactly once, ever
   guideSeen: boolean; // the ? guide pulses until it's opened once
+  activationDone: boolean; // the first-run coach (run/break/measure) is done or skipped
 }
 
 export interface LayoutState extends Persisted {
@@ -44,6 +45,7 @@ export interface LayoutState extends Persisted {
   markGuideSeen(): void;
   openTour(): void;
   closeTour(): void;
+  completeActivation(): void;
   enterApp(): void;
 }
 
@@ -60,6 +62,7 @@ const DEFAULTS: Persisted = {
   glowSignal: "load",
   tourSeen: false,
   guideSeen: false,
+  activationDone: false,
 };
 
 const clamp = (dim: Dim, v: number): number =>
@@ -101,6 +104,7 @@ function load(): Persisted {
           : DEFAULTS.glowSignal,
       tourSeen: s.tourSeen ?? DEFAULTS.tourSeen,
       guideSeen: s.guideSeen ?? DEFAULTS.guideSeen,
+      activationDone: s.activationDone ?? DEFAULTS.activationDone,
     };
   } catch {
     return DEFAULTS;
@@ -123,6 +127,7 @@ export const useLayoutStore = create<LayoutState>()((set, get) => {
       glowSignal,
       tourSeen,
       guideSeen,
+      activationDone,
     } = get();
     try {
       localStorage.setItem(
@@ -140,6 +145,7 @@ export const useLayoutStore = create<LayoutState>()((set, get) => {
           glowSignal,
           tourSeen,
           guideSeen,
+          activationDone,
         }),
       );
     } catch {
@@ -150,7 +156,8 @@ export const useLayoutStore = create<LayoutState>()((set, get) => {
   return {
     ...initial,
     enteredApp: false,
-    tourOpen: !initial.tourSeen, // first-time visitors get the tour automatically
+    // The first-run coach is the activation path now; the tour is opt-in (Guide).
+    tourOpen: false,
     resize(dim, deltaPx) {
       const next = clamp(dim, get()[dim] + deltaPx);
       if (next === get()[dim]) return;
@@ -198,6 +205,11 @@ export const useLayoutStore = create<LayoutState>()((set, get) => {
     closeTour() {
       set({ tourOpen: false });
       get().markTourSeen();
+    },
+    completeActivation() {
+      if (get().activationDone) return;
+      set({ activationDone: true });
+      persist();
     },
     enterApp() {
       set({ enteredApp: true });

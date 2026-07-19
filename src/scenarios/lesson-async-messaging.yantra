@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "scn-lesson-async-000000000044",
-  "name": "Lesson 12: Async Messaging & Consumer Lag",
+  "name": "Lesson 9: Async Messaging & Consumer Lag",
   "createdAt": "2026-07-05T00:00:00.000Z",
   "updatedAt": "2026-07-05T00:00:00.000Z",
   "seed": 4412,

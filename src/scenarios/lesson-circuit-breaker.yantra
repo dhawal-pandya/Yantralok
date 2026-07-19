@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "scn-lesson-breaker-000000000043",
-  "name": "Lesson 11: Circuit Breakers Stop the Storm",
+  "name": "Lesson 8: Circuit Breakers Stop the Storm",
   "createdAt": "2026-07-05T00:00:00.000Z",
   "updatedAt": "2026-07-05T00:00:00.000Z",
   "seed": 4311,

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "scn-lesson-replicas-00000037",
-  "name": "Lesson 8: Read Replicas & Stale Reads",
+  "name": "Lesson 5: Read Replicas & Stale Reads",
   "createdAt": "2026-07-04T00:00:00.000Z",
   "updatedAt": "2026-07-04T00:00:00.000Z",
   "seed": 1108,

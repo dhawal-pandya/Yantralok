@@ -129,9 +129,11 @@ export function Toolbar() {
 
       <div className="mx-1 h-5 w-px bg-neutral-800" />
 
-      {/* Identity: the editable title and the system switcher, as one control */}
+      {/* Identity: the editable title and the systems menu, as one control. The
+          menu is always present (even with one system) so the multi-system model
+          is discoverable, not hidden until you happen to have two. */}
       <div className="flex items-center rounded border border-neutral-700 bg-neutral-900 transition-colors focus-within:border-signal">
-        <Tip label="Click to rename this design">
+        <Tip label="Click to rename. This name is also the .yantra filename when you export.">
           <input
             aria-label="System name"
             className="w-52 bg-transparent px-2 py-1 text-sm font-medium text-neutral-100 focus:outline-none"
@@ -140,31 +142,43 @@ export function Toolbar() {
             placeholder="Untitled System"
           />
         </Tip>
-        {systems.length > 1 && (
-          <details ref={switchMenu} className="relative">
-            <Tip label="Switch to another saved system">
-              <summary className="flex cursor-pointer list-none items-center border-l border-neutral-700 px-1.5 py-1.5 text-neutral-400 hover:text-neutral-200">
-                <Chevron />
-              </summary>
-            </Tip>
-            <div className="absolute left-0 z-20 mt-1 flex w-56 flex-col rounded border border-neutral-700 bg-neutral-850 py-1 shadow-xl">
-              {systems
-                .filter((m) => m.id !== doc?.id)
-                .map((m) => (
-                  <button
-                    key={m.id}
-                    className={item}
-                    onClick={() => {
-                      openSystem(m.id);
-                      closeSwitch();
-                    }}
-                  >
-                    {m.name}
-                  </button>
-                ))}
+        <details ref={switchMenu} className="relative">
+          <Tip label="Your saved systems: switch between them or start a new one">
+            <summary className="flex cursor-pointer list-none items-center border-l border-neutral-700 px-1.5 py-1.5 text-neutral-400 hover:text-neutral-200">
+              <Chevron />
+            </summary>
+          </Tip>
+          <div className="absolute left-0 z-20 mt-1 flex w-60 flex-col rounded border border-neutral-700 bg-neutral-850 py-1 shadow-xl">
+            <div className="px-2.5 py-1 text-[10px] font-semibold uppercase tracking-widest text-neutral-500">
+              Your systems ({systems.length})
             </div>
-          </details>
-        )}
+            {systems.map((m) => (
+              <button
+                key={m.id}
+                className={`flex items-center gap-2 ${item}`}
+                onClick={() => {
+                  if (m.id !== doc?.id) openSystem(m.id);
+                  closeSwitch();
+                }}
+              >
+                <span
+                  className={`h-1.5 w-1.5 shrink-0 rounded-full ${m.id === doc?.id ? "bg-signal" : "bg-transparent"}`}
+                />
+                <span className="truncate">{m.name}</span>
+              </button>
+            ))}
+            <div className="my-1 h-px bg-neutral-800" />
+            <button
+              className={item}
+              onClick={() => {
+                void newSystem();
+                closeSwitch();
+              }}
+            >
+              ＋ New system
+            </button>
+          </div>
+        </details>
       </div>
 
       <Tip label="Create a new empty system">

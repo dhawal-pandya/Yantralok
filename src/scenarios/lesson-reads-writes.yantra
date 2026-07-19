@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "scn-lesson-writes-000000000036",
-  "name": "Lesson 6: Reads vs Writes",
+  "name": "Lesson 3: Reads vs Writes",
   "createdAt": "2026-07-04T00:00:00.000Z",
   "updatedAt": "2026-07-04T00:00:00.000Z",
   "seed": 1106,

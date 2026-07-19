@@ -1,25 +1,25 @@
-// The ambient-glow control in the timeline bar: an on/off toggle plus, when on,
-// a ρ / lat / $ selector for which signal colors the nodes. Off by default: the
-// glow is purely cosmetic and scales with system size, so it's opt-in, and off
-// is the escape hatch on a large graph.
+// The Lens control in the timeline bar: an on/off toggle plus, when on, a
+// Load / Latency / Cost selector for which signal tints the system. Off by
+// default: the tint is a legibility aid and scales with system size, so it's
+// opt-in, and off is the escape hatch on a large graph.
 import { useLayoutStore, type GlowSignal } from "@/ui/store/layoutStore";
 import { Tip } from "./Tooltip";
 
 const SIGNALS: { signal: GlowSignal; label: string; tip: string }[] = [
   {
     signal: "load",
-    label: "ρ",
-    tip: "Color nodes by utilization ρ (live load)",
+    label: "Load",
+    tip: "Tint nodes by utilization ρ: the tier nearest 100% is your bottleneck",
   },
   {
     signal: "latency",
-    label: "lat",
-    tip: "Color nodes by where end-to-end latency accumulates",
+    label: "Latency",
+    tip: "Tint nodes by where end-to-end latency accumulates",
   },
   {
     signal: "cost",
-    label: "$",
-    tip: "Color nodes by cost share: costliest red, cheapest green",
+    label: "Cost",
+    tip: "Tint nodes by cost share: costliest red, cheapest green",
   },
 ];
 
@@ -34,8 +34,8 @@ export function GlowToggle() {
       <Tip
         label={
           glow
-            ? "Turn off the ambient glow"
-            : "Tint nodes and wires by health, so a run reads at a glance (cosmetic; off for large graphs)"
+            ? "Turn the lens off"
+            : "Tint the whole system by a signal (load, latency, or cost) to spot the bottleneck at a glance"
         }
         side="top"
       >
@@ -47,7 +47,7 @@ export function GlowToggle() {
               : "border-neutral-700 text-neutral-400 hover:border-neutral-500 hover:text-neutral-200"
           }`}
         >
-          ● Glow
+          ◉ Lens
         </button>
       </Tip>
       {glow && (

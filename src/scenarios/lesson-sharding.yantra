@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "scn-lesson-sharding-000000045",
-  "name": "Lesson 13: Sharding Scales & Isolates",
+  "name": "Lesson 10: Sharding Scales & Isolates",
   "createdAt": "2026-07-05T00:00:00.000Z",
   "updatedAt": "2026-07-05T00:00:00.000Z",
   "seed": 4513,

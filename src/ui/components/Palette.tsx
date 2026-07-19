@@ -17,9 +17,10 @@ export function Palette() {
   const count = useSystemStore((s) => s.doc?.graph.nodes.length ?? 0);
 
   const place = (type: string) => {
-    // Cascade new nodes so they don't stack on top of each other.
+    // Cascade new nodes so they don't stack on top of each other, and pan to the
+    // new node so it's visible even if the view has scrolled away from the graph.
     const i = count % 8;
-    placeNode(type, { x: 80 + i * 36, y: 96 + i * 36 });
+    placeNode(type, { x: 80 + i * 36, y: 96 + i * 36 }, { center: true });
   };
 
   const groups = CATEGORY_ORDER.map((cat) => ({

@@ -29,7 +29,7 @@ describe("shipped scenarios", () => {
     }
   });
 
-  it("is three shelves: lessons 1..14, ~11 companies, then showcases last", () => {
+  it("is three shelves: lessons 1..11, ~11 companies, then showcases last", () => {
     expect(SHOWCASES.length).toBeGreaterThanOrEqual(6);
     for (const s of SHOWCASES) expect(s.lesson).toBeUndefined();
     // Showcases sit LAST now, after every company.
@@ -38,7 +38,7 @@ describe("shipped scenarios", () => {
     expect(firstShowcaseIdx).toBeGreaterThanOrEqual(0);
     expect(firstShowcaseIdx).toBeGreaterThan(lastCompanyIdx);
 
-    expect(LESSONS.map((s) => s.lesson)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]);
+    expect(LESSONS.map((s) => s.lesson)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
     for (const s of LESSONS) expect(s.title).toMatch(/^Lesson \d+: /);
     expect(COMPANIES.length).toBeGreaterThanOrEqual(10);
     for (const s of COMPANIES) expect(s.lesson).toBeUndefined();
@@ -61,9 +61,6 @@ describe("shipped scenarios", () => {
 
   it("each demonstrates its distinct behavior", () => {
     const byId = (id: string) => run(SCENARIOS.find((s) => s.id === id)!.raw);
-
-    // CRUD API: healthy, no failures.
-    expect(byId("scn-crud-api-0000-0000-000000000001").result.totals.failures).toBe(0);
 
     // Cache shield: idle Postgres until the kill, then it saturates and requests fail.
     const cache = byId("scn-cache-shield-0000-000000000002").result;
@@ -149,24 +146,24 @@ describe("shipped scenarios", () => {
     expect(mean(crTail.map((w) => w.throughput))).toBeGreaterThan(300); // recovered on heal
     expect(mean(crTail.map((w) => w.failureRate))).toBeLessThan(50); // and mostly succeeding
 
-    // Lesson 11 vs Lesson 5: the same retry storm, but the breaker rests the DB so
-    // throughput recovers in bursts, where Lesson 5 stays pinned at zero.
+    // Lesson 8 vs Lesson 2: the same retry storm, but the breaker rests the DB so
+    // throughput recovers in bursts, where Lesson 2 stays pinned at zero.
     const lateThru = (r: { windows: { throughput: number }[] }) =>
       max(r.windows.slice(-40).map((w) => w.throughput));
     const storm = byId("scn-retry-storm-0000-000000000003").result;
     const breaker = byId("scn-lesson-breaker-000000000043").result;
-    expect(lateThru(storm)).toBeLessThan(50); // Lesson 5 collapsed for good
-    expect(lateThru(breaker)).toBeGreaterThan(150); // Lesson 11 recovers
+    expect(lateThru(storm)).toBeLessThan(50); // Lesson 2 collapsed for good
+    expect(lateThru(breaker)).toBeGreaterThan(150); // Lesson 8 recovers
     expect(breaker.totals.failures).toBeLessThan(storm.totals.failures); // and fails less overall
 
-    // Lesson 12: producer decoupled from consumer; the lag climbs while the
+    // Lesson 9: producer decoupled from consumer; the lag climbs while the
     // producer's own latency stays at the link cost.
     const async = byId("scn-lesson-async-000000000044").result;
     const asyncBacklog = async.windows.map((w) => w.stations.find((s) => s.id === "kafka")!.backlog);
     expect(asyncBacklog[asyncBacklog.length - 1]).toBeGreaterThan(asyncBacklog[10] + 100); // lag grows
     expect(mean(async.windows.slice(-10).map((w) => w.meanLatency))).toBeLessThan(20); // producer stays fast
 
-    // Lesson 13 (sharding): green until the shard is killed at 5s, then only that
+    // Lesson 10 (sharding): green until the shard is killed at 5s, then only that
     // cell's ~1/4 slice fails while the store keeps serving the rest.
     const shard = byId("scn-lesson-sharding-000000045").result;
     const wps = 1000 / shard.windows[0].windowMs;
@@ -176,7 +173,7 @@ describe("shipped scenarios", () => {
     expect(mean(post.map((w) => w.failureRate))).toBeGreaterThan(50); // the dead shard's slice fails
     expect(mean(post.map((w) => w.throughput))).toBeGreaterThan(300); // other shards keep serving
 
-    // Lesson 14 (quorum): a weak quorum (W=1,R=1,RF=3) reads ~2/3 stale.
+    // Lesson 11 (quorum): a weak quorum (W=1,R=1,RF=3) reads ~2/3 stale.
     const quorum = byId("scn-lesson-quorum-0000000046").result;
     const staleQ = quorum.windows
       .slice(-30)

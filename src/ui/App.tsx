@@ -4,8 +4,10 @@
 import * as Tooltip from "@radix-ui/react-tooltip";
 import { ReactFlowProvider } from "@xyflow/react";
 import { useEffect } from "react";
+import { FIRST_RUN_EXAMPLE_RAW } from "@/scenarios";
 import { Canvas } from "./components/Canvas";
 import { ChartsPanel } from "./components/ChartsPanel";
+import { FirstRunCoach } from "./components/FirstRunCoach";
 import { Hero } from "./components/Hero";
 import { Inspector } from "./components/Inspector";
 import { Palette } from "./components/Palette";
@@ -37,7 +39,8 @@ export function App() {
   const hasResult = useSimStore((s) => s.result !== null);
 
   useEffect(() => {
-    void init();
+    // A brand-new visitor lands in a pre-loaded fragile example, not a blank canvas.
+    void init({ firstRunExample: FIRST_RUN_EXAMPLE_RAW });
   }, [init]);
 
   // Playback clock: a single rAF loop advances the sim clock; tick() is a no-op
@@ -119,6 +122,7 @@ export function App() {
             )}
             <TimelineBar />
             <Readouts />
+            <FirstRunCoach />
             <Tour />
           </>
         )}

@@ -58,20 +58,29 @@ export function SystemNode({ data, selected }: NodeProps<SystemFlowNode>) {
 
   const dead = metric?.dead;
 
+  // The busiest tier "shines" in its own health color (green when lightly loaded,
+  // red when hot), so it stands out without being mislabeled a bottleneck. This
+  // holds even with the ambient Lens off, since it's just the one node.
+  const shine =
+    metric?.bottleneck && !dead
+      ? `0 0 22px 3px ${rgba(healthColor(rho), 0.55)}`
+      : glow && !dead
+        ? glowShadow(glow)
+        : undefined;
+
   return (
     <div
+      title={metric?.bottleneck && !dead ? "Busiest tier right now (highest utilization)" : undefined}
       className={`relative min-w-[140px] rounded-md border bg-neutral-900 shadow-md transition-shadow ${
         dead
           ? "border-red-500 opacity-60"
-          : metric?.bottleneck
-            ? "border-red-500 ring-1 ring-red-500/50"
-            : selected
-              ? "border-signal"
-              : "border-neutral-700"
+          : selected
+            ? "border-signal"
+            : "border-neutral-700"
       }`}
       style={{
         borderLeft: `3px solid ${def?.accent ?? "#52525b"}`,
-        ...(glow && !dead ? { boxShadow: glowShadow(glow) } : {}),
+        ...(shine ? { boxShadow: shine } : {}),
       }}
     >
       {SIDES.map((s) => (

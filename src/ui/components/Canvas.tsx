@@ -12,7 +12,7 @@ import {
   type EdgeChange,
   type NodeChange,
 } from "@xyflow/react";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { getComponent } from "@/components";
 import { useSystemStore } from "@/ui/store/systemStore";
 import { currentWindowIndex, useSimStore } from "@/ui/store/simStore";
@@ -33,6 +33,7 @@ import {
   type SystemFlowNode,
 } from "./SystemNode";
 import { PacketOverlay } from "./PacketOverlay";
+import { Tip } from "./Tooltip";
 
 const nodeTypes = { system: SystemNode };
 
@@ -44,10 +45,25 @@ export function Canvas() {
   const connect = useSystemStore((s) => s.connect);
   const select = useSystemStore((s) => s.select);
   const placeNode = useSystemStore((s) => s.placeNode);
+  const pendingCenter = useSystemStore((s) => s.pendingCenter);
+  const clearPendingCenter = useSystemStore((s) => s.clearPendingCenter);
 
   // Drag a palette component onto the canvas: drop it at the cursor (converted to
   // flow coordinates), positioned so the node centers under where you let go.
-  const { screenToFlowPosition } = useReactFlow();
+  const { screenToFlowPosition, setCenter, getZoom, zoomIn, zoomOut, fitView } =
+    useReactFlow();
+
+  // A click-placed node lands at a fixed spot near the graph; if the view has
+  // scrolled away, pan to it so it's visible. Drag-drops place under the cursor
+  // and never request this, so building a layout by dragging isn't disturbed.
+  useEffect(() => {
+    if (!pendingCenter) return;
+    setCenter(pendingCenter.x + 75, pendingCenter.y + 32, {
+      zoom: getZoom(),
+      duration: 400,
+    });
+    clearPendingCenter();
+  }, [pendingCenter, setCenter, getZoom, clearPendingCenter]);
   const onDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = "copy";
@@ -245,9 +261,43 @@ export function Canvas() {
           size={1}
           color="#313a49"
         />
-        <Controls className="shadow-none!" />
+        {/* Custom controls: no interactivity "lock" (it also disables node
+            selection, breaking click-to-inspect), and every button self-explains. */}
+        <Controls showZoom={false} showFitView={false} showInteractive={false} className="shadow-none!">
+          <Tip label="Zoom in" side="right">
+            <button className="react-flow__controls-button" aria-label="Zoom in" onClick={() => zoomIn({ duration: 200 })}>
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6z" />
+              </svg>
+            </button>
+          </Tip>
+          <Tip label="Zoom out" side="right">
+            <button className="react-flow__controls-button" aria-label="Zoom out" onClick={() => zoomOut({ duration: 200 })}>
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M5 11h14v2H5z" />
+              </svg>
+            </button>
+          </Tip>
+          <Tip label="Fit the whole graph in view" side="right">
+            <button className="react-flow__controls-button" aria-label="Fit graph to view" onClick={() => fitView({ duration: 300, padding: 0.2 })}>
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M4 4h6v2H6v4H4V4zm10 0h6v6h-2V6h-4V4zM6 14v4h4v2H4v-6h2zm14 0v6h-6v-2h4v-4h2z" />
+              </svg>
+            </button>
+          </Tip>
+        </Controls>
         <PacketOverlay />
       </ReactFlow>
+      {nodes.length === 0 && (
+        <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
+          <div className="rounded-lg border border-dashed border-neutral-700 bg-neutral-900/70 px-5 py-4 text-center">
+            <div className="text-sm text-neutral-300">Your canvas is empty</div>
+            <div className="mt-1 text-xs text-neutral-500">
+              Drag a component from the palette on the left to begin, or load a system from Guide.
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -48,11 +48,13 @@ export interface SystemState {
   doc: SystemDoc | null;
   systems: SystemMeta[];
   selection: Selection;
+  pendingCenter: { x: number; y: number } | null; // a click-added node the canvas should pan to
   status: SaveStatus;
   ready: boolean;
 
-  // lifecycle / system management
-  init(): Promise<void>;
+  // lifecycle / system management. On a first-ever visit (no saved systems),
+  // firstRunExample seeds a real example instead of a blank doc.
+  init(opts?: { firstRunExample?: string }): Promise<void>;
   newSystem(name?: string): Promise<void>;
   openSystem(id: string): Promise<void>;
   deleteSystem(id: string): Promise<void>;
@@ -60,7 +62,7 @@ export interface SystemState {
   flush(): Promise<void>;
 
   // graph editing (canvas)
-  placeNode(type: string, position: Point): void;
+  placeNode(type: string, position: Point, opts?: { center?: boolean }): void;
   onNodesChange(changes: NodeChange[]): void;
   onEdgesChange(changes: EdgeChange[]): void;
   connect(source: string, target: string, handles?: EdgeHandles): void;
@@ -73,6 +75,7 @@ export interface SystemState {
 
   // selection (view state)
   select(selection: Selection): void;
+  clearPendingCenter(): void;
 
   // import / export
   exportText(): string | null;
@@ -108,10 +111,11 @@ export function makeSystemStore(deps?: {
       doc: null,
       systems: [],
       selection: null,
+      pendingCenter: null,
       status: "saved", // never shown before init() runs; the app renders "Loading…" until ready
       ready: false,
 
-      async init() {
+      async init(opts) {
         const systems = await repo.list();
         const lastId = storage.get(LAST_OPENED_KEY);
         let doc: SystemDoc | null = null;
@@ -121,8 +125,18 @@ export function makeSystemStore(deps?: {
           doc = await repo.load(systems[0].id);
         }
         if (!doc) {
-          doc = createDocument({ name: "Untitled System" });
-          await repo.save(doc);
+          // First-ever visit: seed the provided example, else a blank doc.
+          if (opts?.firstRunExample) {
+            try {
+              doc = await repo.importFile(opts.firstRunExample);
+            } catch {
+              doc = createDocument({ name: "Untitled System" });
+              await repo.save(doc);
+            }
+          } else {
+            doc = createDocument({ name: "Untitled System" });
+            await repo.save(doc);
+          }
         }
         storage.set(LAST_OPENED_KEY, doc.id);
         set({
@@ -180,12 +194,18 @@ export function makeSystemStore(deps?: {
         }
       },
 
-      placeNode(type, position) {
+      placeNode(type, position, opts) {
         const { doc } = get();
         if (!doc) return;
         const next = addNode(doc, type, position);
         const created = next.graph.nodes[next.graph.nodes.length - 1];
-        set({ doc: next, selection: { kind: "node", id: created.id } });
+        set({
+          doc: next,
+          selection: { kind: "node", id: created.id },
+          // Click-placed nodes land at a fixed spot; ask the canvas to pan to it
+          // in case the view has been scrolled away from the graph.
+          ...(opts?.center ? { pendingCenter: created.position } : {}),
+        });
         schedulePersist();
       },
 
@@ -260,6 +280,10 @@ export function makeSystemStore(deps?: {
 
       select(selection) {
         set({ selection });
+      },
+
+      clearPendingCenter() {
+        if (get().pendingCenter) set({ pendingCenter: null });
       },
 
       exportText() {

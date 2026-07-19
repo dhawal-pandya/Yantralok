@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "scn-lesson-quorum-0000000046",
-  "name": "Lesson 14: Quorum & Consistency",
+  "name": "Lesson 11: Quorum & Consistency",
   "createdAt": "2026-07-05T00:00:00.000Z",
   "updatedAt": "2026-07-05T00:00:00.000Z",
   "seed": 4614,

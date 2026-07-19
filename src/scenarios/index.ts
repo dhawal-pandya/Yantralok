@@ -18,9 +18,6 @@ import circuitBreaker from "./lesson-circuit-breaker.yantra?raw";
 import asyncMessaging from "./lesson-async-messaging.yantra?raw";
 import sharding from "./lesson-sharding.yantra?raw";
 import quorum from "./lesson-quorum.yantra?raw";
-import crudApi from "./crud-api.yantra?raw";
-import scaleOut from "./lesson-scale-out.yantra?raw";
-import addCache from "./lesson-add-cache.yantra?raw";
 import cacheShield from "./cache-shield.yantra?raw";
 import retryStorm from "./retry-storm.yantra?raw";
 import readsWrites from "./lesson-reads-writes.yantra?raw";
@@ -39,6 +36,11 @@ import spotify from "./spotify-play.yantra?raw";
 import stripe from "./stripe-charge.yantra?raw";
 import uber from "./uber-matching.yantra?raw";
 import irctc from "./irctc-tatkal.yantra?raw";
+
+/** The system a brand-new visitor is dropped into: a cache shielding Postgres,
+ * fragile on purpose (kill the cache and Postgres melts). Drives the first-run
+ * activation flow. */
+export const FIRST_RUN_EXAMPLE_RAW = cacheShield;
 
 export interface ScenarioEntry {
   /** The `.yantra` document id, stable, so re-loading reloads the pristine demo. */
@@ -59,129 +61,102 @@ export interface ScenarioEntry {
 export const SCENARIOS: readonly ScenarioEntry[] = [
   // ---- Lessons: the curriculum, one law at a time ----
   {
-    id: "scn-crud-api-0000-0000-000000000001",
-    title: "Lesson 1: A Simple CRUD API",
-    blurb: "Client → API → Postgres, healthy under load.",
-    teaches: "Queues and utilization ρ: find the bottleneck by turning knobs, not guessing.",
-    kind: "lesson",
-    lesson: 1,
-    raw: crudApi,
-  },
-  {
-    id: "scn-lesson-scale-out-00000034",
-    title: "Lesson 2: Scale Out & Survive a Kill",
-    blurb: "An LB spreads load over three small APIs; one dies at 4s and comes back at 7s.",
-    teaches: "Call-one routing: a dead backend's share shifts to the survivors, they run hot, not down.",
-    kind: "lesson",
-    lesson: 2,
-    raw: scaleOut,
-  },
-  {
-    id: "scn-lesson-add-cache-00000035",
-    title: "Lesson 3: Add a Cache",
-    blurb: "Redis absorbs 90% of reads in front of a tiny Postgres; writes slip past it.",
-    teaches: "The cache law: DB load ≈ (1−h)·read λ + write λ. Drag the hit ratio and watch it move.",
-    kind: "lesson",
-    lesson: 3,
-    raw: addCache,
-  },
-  {
     id: "scn-cache-shield-0000-000000000002",
-    title: "Lesson 4: Kill the Cache",
-    blurb: "The same shield, until Redis dies at 5s and the miss trickle becomes a flood.",
+    title: "Lesson 1: Kill the Cache",
+    blurb: "Redis shields a tiny Postgres from 90% of reads, until Redis dies at 5s and the miss trickle becomes a flood.",
     teaches: "Cache-death cascade: killing the cache drives h→0 and the shielded load lands on the store.",
     kind: "lesson",
-    lesson: 4,
+    lesson: 1,
     raw: cacheShield,
   },
   {
     id: "scn-retry-storm-0000-000000000003",
-    title: "Lesson 5: Retry Storm",
+    title: "Lesson 2: Retry Storm",
     blurb: "A tight 80ms timeout + 3 retries against a Postgres that is barely keeping up.",
     teaches: "Retry/timeout amplification: each retry multiplies offered load, the cascade fuel.",
     kind: "lesson",
-    lesson: 5,
+    lesson: 2,
     raw: retryStorm,
   },
   {
     id: "scn-lesson-writes-000000000036",
-    title: "Lesson 6: Reads vs Writes",
+    title: "Lesson 3: Reads vs Writes",
     blurb: "A PERFECT cache (h=1) in front of Postgres, yet the DB still runs at ρ≈0.5.",
     teaches: "Writes bypass caches: no hit ratio shields the write path. Crank the write ratio to prove it.",
     kind: "lesson",
-    lesson: 6,
+    lesson: 3,
     raw: readsWrites,
   },
   {
     id: "scn-autoscale-flash-00000032",
-    title: "Lesson 7: Flash Crowd Autoscaling",
+    title: "Lesson 4: Flash Crowd Autoscaling",
     blurb: "5,200 req/s slams a one-instance API; the autoscaler grows the fleet ×1→×5.",
     teaches: "Autoscaling lags the spike: shed load first, capacity after the boot delay, then the bottleneck moves.",
     kind: "lesson",
-    lesson: 7,
+    lesson: 4,
     raw: autoscaleFlash,
   },
   {
     id: "scn-lesson-replicas-00000037",
-    title: "Lesson 8: Read Replicas & Stale Reads",
+    title: "Lesson 5: Read Replicas & Stale Reads",
     blurb: "Postgres with 2 read replicas and a 20ms lag under a 5% write load.",
     teaches: "Reads route to replicas, writes stay on the primary, and ~⅓ of replica reads land inside the lag window: stale.",
     kind: "lesson",
-    lesson: 8,
+    lesson: 5,
     raw: readReplicas,
   },
   {
     id: "scn-lesson-fanout-000000000038",
-    title: "Lesson 9: Fan-out & the Critical Path",
+    title: "Lesson 6: Fan-out & the Critical Path",
     blurb: "One request fans out to MongoDB, Elasticsearch, and S3 in turn.",
     teaches: "Sequential fan-out sums the branches, see S3 dominate the waterfall. Then flip the API's Fan-out knob to parallel and watch latency collapse to the slowest branch.",
     kind: "lesson",
-    lesson: 9,
+    lesson: 6,
     raw: fanout,
   },
   {
     id: "scn-lesson-fullstack-00000039",
-    title: "Lesson 10: The Full Stack",
+    title: "Lesson 7: The Full Stack",
     blurb: "CDN → gateway → autoscaled API → Redis → replicated Postgres; the CDN dies at 5s.",
     teaches: "Everything at once: edge offload, the cascade, the autoscaler's rescue, and stale reads, one system.",
     kind: "lesson",
-    lesson: 10,
+    lesson: 7,
     raw: fullStack,
   },
   {
     id: "scn-lesson-breaker-000000000043",
-    title: "Lesson 11: Circuit Breakers Stop the Storm",
-    blurb: "Lesson 5's exact retry storm, with a circuit breaker added on the Postgres dependency.",
-    teaches: "The breaker trips OPEN instead of hammering the failing DB, rests it, then a half-open probe restores traffic, so throughput recovers in bursts where Lesson 5 stays pinned at zero.",
+    title: "Lesson 8: Circuit Breakers Stop the Storm",
+    blurb: "Lesson 2's exact retry storm, with a circuit breaker added on the Postgres dependency.",
+    teaches: "The breaker trips OPEN instead of hammering the failing DB, rests it, then a half-open probe restores traffic, so throughput recovers in bursts where Lesson 2 stays pinned at zero.",
     kind: "lesson",
-    lesson: 11,
+    lesson: 8,
     raw: circuitBreaker,
   },
   {
     id: "scn-lesson-async-000000000044",
-    title: "Lesson 12: Async Messaging & Consumer Lag",
+    title: "Lesson 9: Async Messaging & Consumer Lag",
     blurb: "The broker primitive in isolation: a producer publishing 150 msg/s into Kafka drained by 4 consumers (~100 msg/s).",
     teaches: "Producing is decoupled from consuming: the producer's latency stays at the link cost while the consumer lag (backlog) climbs, because produce rate exceeds consume capacity.",
     kind: "lesson",
-    lesson: 12,
+    lesson: 9,
     raw: asyncMessaging,
   },
   {
     id: "scn-lesson-sharding-000000045",
-    title: "Lesson 13: Sharding Scales & Isolates",
+    title: "Lesson 10: Sharding Scales & Isolates",
     blurb: "An Elasticsearch split into 4 shards, each an independent cell; one shard is killed at 5s.",
     teaches: "Each shard is its own pool over its own key slice, so more shards raise the ceiling and a dead shard fails only its ~1/4 of requests, the rest keep serving.",
     kind: "lesson",
-    lesson: 13,
+    lesson: 10,
     raw: sharding,
   },
   {
     id: "scn-lesson-quorum-0000000046",
-    title: "Lesson 14: Quorum & Consistency",
+    title: "Lesson 11: Quorum & Consistency",
     blurb: "A 6-node Cassandra ring at RF=3 with a WEAK quorum (W=1, R=1) under a 30% write load.",
     teaches: "Weak quorum trades consistency for speed: with W+R ≤ RF, ~2/3 of reads miss the latest write (stale). Raise W and R until W+R > RF and staleness vanishes.",
     kind: "lesson",
-    lesson: 14,
+    lesson: 11,
     raw: quorum,
   },
 
@@ -222,7 +197,7 @@ export const SCENARIOS: readonly ScenarioEntry[] = [
     id: "scn-reddit-sub-00000000000023",
     title: "Reddit: Subreddit Listing",
     blurb: "Real scale: Reddit serves ~3–8K QPS site-wide. This is a big-subreddit event at 3,000 req/s on Reddit's real pairing, Postgres shielded by memcached, running green at ρ≈0.35.",
-    teaches: "The shield at production scale: h=0.9 keeps a modest pool at a third of capacity. Kill memcached yourself to reproduce Lesson 4 at 3,000 req/s.",
+    teaches: "The shield at production scale: h=0.9 keeps a modest pool at a third of capacity. Kill memcached yourself to reproduce Lesson 1 at 3,000 req/s.",
     kind: "company",
     raw: reddit,
   },
