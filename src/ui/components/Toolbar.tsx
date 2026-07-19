@@ -1,6 +1,6 @@
 // Top bar: system identity + management (new / switch / delete), the shipped
 // scenario loader, and import/export (.yantra, Mermaid, simulation report).
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import {
   toMermaid,
   toSimulationReport,
@@ -86,6 +86,17 @@ export function Toolbar() {
 
   const closeExport = () => exportMenu.current?.removeAttribute("open");
   const closeSwitch = () => switchMenu.current?.removeAttribute("open");
+
+  // Native <details> menus stay open on outside click; close them ourselves.
+  useEffect(() => {
+    const onDown = (e: PointerEvent) => {
+      for (const menu of [exportMenu.current, switchMenu.current]) {
+        if (menu?.open && !menu.contains(e.target as Node)) menu.removeAttribute("open");
+      }
+    };
+    document.addEventListener("pointerdown", onDown);
+    return () => document.removeEventListener("pointerdown", onDown);
+  }, []);
 
   const onExportYantra = () => {
     const text = exportText();

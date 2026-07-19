@@ -23,6 +23,7 @@ export function ScenarioGuide({ onLoad }: { onLoad: (id: string) => void }) {
   const [selected, setSelected] = useState<string | null>(null);
   const guideSeen = useLayoutStore((s) => s.guideSeen);
   const markGuideSeen = useLayoutStore((s) => s.markGuideSeen);
+  const openTour = useLayoutStore((s) => s.openTour);
   const openGuide = () => {
     setOpen(true);
     markGuideSeen();
@@ -42,17 +43,18 @@ export function ScenarioGuide({ onLoad }: { onLoad: (id: string) => void }) {
 
   return (
     <>
-      <Tip label="Browse and load pre-built systems (lessons and real companies), with a guide to each">
+      <Tip label="Open the guide: pre-built systems and a walkthrough tour of the platform">
         <button
-          aria-label="Open the pre-built systems guide"
+          aria-label="Open the guide"
           onClick={openGuide}
-          className={`flex h-6 w-6 items-center justify-center rounded-full border text-xs font-semibold transition-colors ${
+          className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-semibold transition-colors ${
             guideSeen
-              ? "border-neutral-700 text-neutral-400 hover:border-signal hover:text-signal"
+              ? "bg-signal/15 text-signal ring-1 ring-inset ring-signal/40 hover:bg-signal/25"
               : "guide-pulse"
           }`}
         >
-          ?
+          <GuideGlyph />
+          Guide
         </button>
       </Tip>
 
@@ -66,14 +68,25 @@ export function ScenarioGuide({ onLoad }: { onLoad: (id: string) => void }) {
             onClick={(e) => e.stopPropagation()}
           >
             <header className="flex items-center justify-between border-b border-neutral-800 px-4 py-2.5">
-              <h2 className="text-sm font-semibold text-neutral-100">Pre-built systems guide</h2>
-              <button
-                aria-label="Close"
-                onClick={() => setOpen(false)}
-                className="rounded border border-neutral-700 px-1.5 py-0.5 text-xs text-neutral-400 hover:border-neutral-500 hover:text-neutral-100"
-              >
-                ✕
-              </button>
+              <h2 className="text-sm font-semibold text-neutral-100">Guide</h2>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    setOpen(false);
+                    openTour();
+                  }}
+                  className="rounded border border-signal/50 bg-signal/10 px-2.5 py-1 text-xs font-semibold text-signal transition-colors hover:bg-signal/20"
+                >
+                  ▶ Show tour
+                </button>
+                <button
+                  aria-label="Close"
+                  onClick={() => setOpen(false)}
+                  className="rounded border border-neutral-700 px-1.5 py-0.5 text-xs text-neutral-400 hover:border-neutral-500 hover:text-neutral-100"
+                >
+                  ✕
+                </button>
+              </div>
             </header>
 
             <div className="flex min-h-0 flex-1">
@@ -135,6 +148,16 @@ export function ScenarioGuide({ onLoad }: { onLoad: (id: string) => void }) {
         </div>
       )}
     </>
+  );
+}
+
+// Open-book mark, so the Guide button reads as "learn / walkthrough".
+function GuideGlyph() {
+  return (
+    <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <path d="M8 3.6C6.7 2.8 5 2.6 2.8 2.9v9c2.2-.3 3.9-.1 5.2.7 1.3-.8 3-1 5.2-.7v-9C11 2.6 9.3 2.8 8 3.6Z" strokeLinejoin="round" />
+      <path d="M8 3.6v9" />
+    </svg>
   );
 }
 

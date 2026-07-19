@@ -13,7 +13,7 @@ export const LAYOUT_BOUNDS = {
 } as const;
 
 type Dim = keyof typeof LAYOUT_BOUNDS;
-export type Panel = "palette" | "inspector" | "charts";
+export type Panel = "palette" | "inspector" | "charts" | "requests";
 /** Which signal drives the ambient glow when it's on: utilization ρ, latency share, or cost share. */
 export type GlowSignal = "load" | "latency" | "cost";
 export const GLOW_SIGNALS: readonly GlowSignal[] = ["load", "latency", "cost"];
@@ -26,6 +26,7 @@ interface Persisted {
   showPalette: boolean;
   showInspector: boolean;
   showCharts: boolean;
+  showRequests: boolean; // request inspector; off by default so the inspector stays roomy
   glow: boolean; // ambient health lens; off by default (cosmetic, scales with size)
   glowSignal: GlowSignal;
   tourSeen: boolean; // the guided tour shows exactly once, ever
@@ -34,12 +35,15 @@ interface Persisted {
 
 export interface LayoutState extends Persisted {
   enteredApp: boolean; // session-only: hero shows on every load
+  tourOpen: boolean; // session-only: the guided tour is currently showing
   resize(dim: Dim, deltaPx: number): void;
   togglePanel(panel: Panel): void;
   toggleGlow(): void;
   setGlowSignal(signal: GlowSignal): void;
   markTourSeen(): void;
   markGuideSeen(): void;
+  openTour(): void;
+  closeTour(): void;
   enterApp(): void;
 }
 
@@ -51,6 +55,7 @@ const DEFAULTS: Persisted = {
   showPalette: true,
   showInspector: true,
   showCharts: true,
+  showRequests: false,
   glow: false,
   glowSignal: "load",
   tourSeen: false,
@@ -87,6 +92,7 @@ function load(): Persisted {
       showPalette: s.showPalette ?? DEFAULTS.showPalette,
       showInspector: s.showInspector ?? DEFAULTS.showInspector,
       showCharts: s.showCharts ?? DEFAULTS.showCharts,
+      showRequests: s.showRequests ?? DEFAULTS.showRequests,
       glow: s.glow ?? (mode !== undefined ? mode !== "off" : DEFAULTS.glow),
       glowSignal: GLOW_SIGNALS.includes(s.glowSignal as GlowSignal)
         ? (s.glowSignal as GlowSignal)
@@ -102,6 +108,7 @@ function load(): Persisted {
 }
 
 export const useLayoutStore = create<LayoutState>()((set, get) => {
+  const initial = load();
   const persist = () => {
     const {
       paletteWidth,
@@ -111,6 +118,7 @@ export const useLayoutStore = create<LayoutState>()((set, get) => {
       showPalette,
       showInspector,
       showCharts,
+      showRequests,
       glow,
       glowSignal,
       tourSeen,
@@ -127,6 +135,7 @@ export const useLayoutStore = create<LayoutState>()((set, get) => {
           showPalette,
           showInspector,
           showCharts,
+          showRequests,
           glow,
           glowSignal,
           tourSeen,
@@ -139,8 +148,9 @@ export const useLayoutStore = create<LayoutState>()((set, get) => {
   };
 
   return {
-    ...load(),
+    ...initial,
     enteredApp: false,
+    tourOpen: !initial.tourSeen, // first-time visitors get the tour automatically
     resize(dim, deltaPx) {
       const next = clamp(dim, get()[dim] + deltaPx);
       if (next === get()[dim]) return;
@@ -153,7 +163,13 @@ export const useLayoutStore = create<LayoutState>()((set, get) => {
           ? { showPalette: !s.showPalette }
           : panel === "charts"
             ? { showCharts: !s.showCharts }
-            : { showInspector: !s.showInspector },
+            : panel === "requests"
+              ? {
+                  showRequests: !s.showRequests,
+                  // Requests live in the inspector column; opening them opens the inspector too.
+                  showInspector: s.showRequests ? s.showInspector : true,
+                }
+              : { showInspector: !s.showInspector },
       );
       persist();
     },
@@ -175,6 +191,13 @@ export const useLayoutStore = create<LayoutState>()((set, get) => {
       if (get().guideSeen) return;
       set({ guideSeen: true });
       persist();
+    },
+    openTour() {
+      set({ tourOpen: true });
+    },
+    closeTour() {
+      set({ tourOpen: false });
+      get().markTourSeen();
     },
     enterApp() {
       set({ enteredApp: true });

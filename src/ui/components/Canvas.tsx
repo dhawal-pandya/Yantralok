@@ -5,7 +5,6 @@ import {
   Background,
   BackgroundVariant,
   Controls,
-  MiniMap,
   ReactFlow,
   useReactFlow,
   type Connection,
@@ -247,14 +246,6 @@ export function Canvas() {
           color="#313a49"
         />
         <Controls className="shadow-none!" />
-        <MiniMap
-          pannable
-          zoomable
-          maskColor="rgba(10,10,11,0.7)"
-          nodeColor={(n) =>
-            (n.data as SystemFlowNode["data"]).def?.accent ?? "#52525b"
-          }
-        />
         <PacketOverlay />
       </ReactFlow>
     </div>

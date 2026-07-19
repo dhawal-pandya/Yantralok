@@ -1,5 +1,5 @@
 // Packet animation overlay: aliveness is data, not animation. Every dot is a real
-// edge traversal the engine emitted: amber = request (forward), green = response
+// edge traversal the engine emitted: amber = request (forward), cyan = response
 // (return), red = failed. Position is interpolated from the segment's [start,end]
 // against the playback clock; nothing moves unless a simulated packet is in flight.
 // With the ambient glow on, packets grow a short trail + soft bloom (congestion
@@ -73,7 +73,7 @@ export function PacketOverlay() {
       const x = a.x + (b.x - a.x) * t;
       const y = a.y + (b.y - a.y) * t;
       const focused = selectedReq === null || selectedReq === seg.req;
-      const color = seg.error ? "#f87171" : seg.request ? "#f5b301" : "#34d399";
+      const color = seg.error ? "#f87171" : seg.request ? "#f5b301" : "#38bdf8";
       const crit = glow && onCritical(seg.from, seg.to);
 
       if (glow) {

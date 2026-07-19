@@ -90,17 +90,13 @@ body {
 .react-flow__controls-button:hover {
   background: #1e2430;
 }
-.react-flow__minimap {
-  background-color: #10141d;
-  border-radius: 6px;
-}
 .react-flow__attribution {
   background: transparent;
   color: #3d4553;
 }
 
-/* First-run cue on the ? guide: amber tint plus a soft expanding ring, until it's
-   opened once. Stilled for users who prefer reduced motion. */
+/* First-run cue on the Guide button: solid amber plus a soft expanding ring,
+   until it's opened once. Stilled for users who prefer reduced motion. */
 .guide-pulse {
   background: var(--color-signal);
   border-color: var(--color-signal);

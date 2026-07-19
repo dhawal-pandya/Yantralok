@@ -31,6 +31,7 @@ export function App() {
   const showPalette = useLayoutStore((s) => s.showPalette);
   const showInspector = useLayoutStore((s) => s.showInspector);
   const showCharts = useLayoutStore((s) => s.showCharts);
+  const showRequests = useLayoutStore((s) => s.showRequests);
   const resize = useLayoutStore((s) => s.resize);
   // The requests panel only exists after a run; its handle appears with it.
   const hasResult = useSimStore((s) => s.result !== null);
@@ -96,7 +97,7 @@ export function App() {
                   <ResizeHandle axis="x" title="Drag to resize the inspector" onResize={(d) => resize("inspectorWidth", -d)} />
                   <div style={{ width: inspectorWidth }} className="flex shrink-0 flex-col overflow-hidden border-l border-neutral-800">
                     <Inspector />
-                    {hasResult && (
+                    {hasResult && showRequests && (
                       <>
                         <ResizeHandle axis="y" title="Drag to resize the requests panel" onResize={(d) => resize("requestsHeight", -d)} />
                         <div style={{ height: requestsHeight }} className="shrink-0 overflow-hidden">

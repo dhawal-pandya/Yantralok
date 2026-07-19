@@ -2,6 +2,7 @@
 // Real values only, no decorative metrics.
 import { ENGINE_VERSION } from "@/engine";
 import { useLayoutStore, type Panel } from "@/ui/store/layoutStore";
+import { useSimStore } from "@/ui/store/simStore";
 import { useSystemStore } from "@/ui/store/systemStore";
 import { Credit } from "./Brand";
 import { Tip } from "./Tooltip";
@@ -10,6 +11,8 @@ export function Readouts() {
   const doc = useSystemStore((s) => s.doc);
   const nodes = doc?.graph.nodes.length ?? 0;
   const edges = doc?.graph.edges.length ?? 0;
+  // The requests panel only exists after a run, so its toggle appears with it.
+  const hasResult = useSimStore((s) => s.result !== null);
 
   return (
     <footer className="flex items-center gap-4 border-t border-neutral-800 bg-neutral-900 px-3 py-1 font-mono text-[10px] text-neutral-500">
@@ -23,6 +26,7 @@ export function Readouts() {
         <PanelToggle panel="palette" label="Palette" />
         <PanelToggle panel="charts" label="Charts" />
         <PanelToggle panel="inspector" label="Inspector" />
+        {hasResult && <PanelToggle panel="requests" label="Requests" />}
       </div>
 
       <div className="ml-auto flex items-center gap-3">
@@ -33,7 +37,12 @@ export function Readouts() {
   );
 }
 
-const SHOW_KEY = { palette: "showPalette", charts: "showCharts", inspector: "showInspector" } as const;
+const SHOW_KEY = {
+  palette: "showPalette",
+  charts: "showCharts",
+  inspector: "showInspector",
+  requests: "showRequests",
+} as const;
 
 function PanelToggle({ panel, label }: { panel: Panel; label: string }) {
   const show = useLayoutStore((s) => s[SHOW_KEY[panel]]);

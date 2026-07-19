@@ -122,7 +122,7 @@ function FailureInjection({ nodeId, cells }: { nodeId: string; cells: number }) 
     rerun();
   };
 
-  const chip = "rounded border px-1.5 py-0.5 text-[10px]";
+  const chip = "rounded border px-2 py-1 text-xs font-medium";
   const num =
     "w-12 rounded border border-neutral-700 bg-neutral-850 px-1 py-0.5 text-neutral-200 focus:border-signal focus:outline-none";
   const commitOnEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -130,8 +130,9 @@ function FailureInjection({ nodeId, cells }: { nodeId: string; cells: number }) 
   };
 
   return (
-    <div className="border-t border-neutral-800 px-3 py-2">
-      <div className="mb-1.5 text-[10px] font-semibold uppercase tracking-widest text-neutral-500">
+    <div className="border-t-2 border-red-500/30 bg-neutral-850 px-3 py-3">
+      <div className="mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest text-neutral-200">
+        <span className="h-2 w-2 rounded-full bg-red-500" />
         Failure injection
       </div>
       <div className="flex flex-wrap gap-1.5">
@@ -209,8 +210,8 @@ function FailureInjection({ nodeId, cells }: { nodeId: string; cells: number }) 
                 </label>
               )}
               <button
-                className="ml-auto text-neutral-600 hover:text-red-400"
-                title="Remove"
+                className="ml-auto rounded border border-red-500/60 bg-red-500/10 px-2 py-0.5 text-xs font-bold text-red-400 hover:bg-red-500/20 hover:text-red-300"
+                title="Remove this failure"
                 onClick={() => {
                   remove(iv.id);
                   rerun();
