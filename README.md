@@ -36,7 +36,7 @@ Then either build `Client → API → Postgres` by hand, or load a shipped demo 
 
 Requires Node 18+.
 
-## What works today (the build plan is complete)
+## What works today
 
 - **Design**, a canvas with **29 components** across Networking / Compute / Storage / Messaging / Infrastructure; drag onto the canvas or click to place, connect, and configure with sane editable defaults; resizable panels; every control explains itself on hover.
 - **Simulate & observe**, run a workload over a configurable horizon, stream live latency / throughput / utilization / queue-depth; per-node ρ, hit rate, and call counts; data-driven packet animation; automatic bottleneck and root-cause surfacing. Raise the Client's request rate to stress-test to any scale.
@@ -51,7 +51,7 @@ Requires Node 18+.
 - **Persistence & export**, multiple systems saved locally (IndexedDB); import/export `.yantra` files; export **Mermaid** diagrams and **Markdown simulation reports**.
 - **Determinism**, seeded PRNG + logical clock; golden-trace and replay-equivalence are first-class tests.
 
-Honesty is enforced: a control either changes the run or is visibly tagged **not simulated**. The full plan (the completed Phases 0–9, then fidelity + UI milestones M1–M13) is documented in [ROADMAP-0.md](docs/ROADMAP-0.md) and [ROADMAP-1.md](docs/ROADMAP-1.md). Still deferred by design: a backend, auth, infrastructure importers, and the Kubernetes / consensus component families.
+Honesty is enforced: a control either changes the run or is visibly tagged **not simulated**. Still deferred by design: a backend, auth, infrastructure importers, and the Kubernetes / consensus component families.
 
 ## Tech stack
 
@@ -67,8 +67,7 @@ src/
   document/    Document ops, the persistence seam, .yantra + Mermaid/report export
   ui/          React app: canvas, inspector, charts, packet overlay, run controls
   scenarios/   Shipped demos as .yantra files, loaded via the normal importer
-docs/          DESIGN.md · ROADMAP-0.md · ROADMAP-1.md · DECISIONS.md · USAGE.md
-CLAUDE.md      The vision and philosophy
+docs/          USAGE.md (the usage guide)
 ```
 
 The dependency rule points inward, `ui → document → components → engine → schema`: and is enforced by lint; `engine/` may import only `schema/`.
@@ -86,12 +85,7 @@ The dependency rule points inward, `ui → document → components → engine �
 ## Documentation
 
 - **[Usage Guide](docs/USAGE.md)**, how to use the product (start here).
-- **[CLAUDE.md](CLAUDE.md)**, vision and philosophy.
-- **[DESIGN.md](docs/DESIGN.md)**, architecture, engine, document model, fidelity.
-- **[ROADMAP-0.md](docs/ROADMAP-0.md)**, the completed phased build plan (Phases 0–9).
-- **[ROADMAP-1.md](docs/ROADMAP-1.md)**, the completed fidelity + UI milestones (M1–M13).
-- **[DECISIONS.md](docs/DECISIONS.md)**, the full ADR-style decision log.
 
 ## Status
 
-Local-first v1: the phased build (0–9) and the fidelity + UI milestones (M1–M13) are complete. No backend, auth, or AI yet, all deliberately deferred behind stable seams (see the ADRs in [DECISIONS.md](docs/DECISIONS.md)).
+Local-first v1, complete and usable right in the browser. No backend, auth, or AI yet, all deliberately deferred behind stable seams.

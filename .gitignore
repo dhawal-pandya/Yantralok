@@ -5,5 +5,8 @@ coverage
 .DS_Store
 .vite
 
+# Local-only planning material; the public repo ships only README + USAGE.
 CLAUDE.md
-/docs
+/docs/*
+!/docs/USAGE.md
+!/docs/assets

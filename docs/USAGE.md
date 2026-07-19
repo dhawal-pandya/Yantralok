@@ -2,7 +2,7 @@
 
 A hands-on guide for the person this tool is built for: a working software engineer trying to understand their own system. If you can read a service diagram but have never _watched_ one behave under load, this is for you.
 
-The vision and the technical spec live in [CLAUDE.md](../CLAUDE.md), [DESIGN.md](DESIGN.md), [ROADMAP-0.md](ROADMAP-0.md), [ROADMAP-1.md](ROADMAP-1.md), and [DECISIONS.md](DECISIONS.md). This document is just "how do I use it."
+This document is a hands-on walkthrough: how to use the product, start to finish.
 
 ---
 
@@ -206,7 +206,7 @@ Hover any component or property for its exact meaning and the law it touches —
 
 ## What it does _not_ simulate (yet)
 
-Honesty is a feature here — so you know exactly how far to trust a result. What the engine _does_ model is broad: parallel fan-out (wait on the slowest branch, not the sum), burst / periodic / ramp load with heavy-tailed service times, retries with backoff and circuit breakers, autoscaling, read replicas with stale reads, cache memory pressure, async brokers with consumer lag and pub/sub, DNS / TLS / keep-alive connections, sharding, and quorum replication. Still on the deferred list (tracked in [ROADMAP-1.md](ROADMAP-1.md)):
+Honesty is a feature here — so you know exactly how far to trust a result. What the engine _does_ model is broad: parallel fan-out (wait on the slowest branch, not the sum), burst / periodic / ramp load with heavy-tailed service times, retries with backoff and circuit breakers, autoscaling, read replicas with stale reads, cache memory pressure, async brokers with consumer lag and pub/sub, DNS / TLS / keep-alive connections, sharding, and quorum replication. Still on the deferred list:
 
 - **Link bandwidth and request payload size** aren't modeled (only link latency and jitter).
 - **Chaos** beyond kill / restart / delay / partition (packet loss, clock skew, disk/memory pressure) isn't wired.
